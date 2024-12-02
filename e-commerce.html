@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>AirPay | e-Commerce Payment Flow</title>
+</head>
+
+<body>
+    <section class="first-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 ps-2 pe-5">
+                    <div class="payment pt-2">
+                        <div class="d-flex align-items-center mt-5">
+                            <p class="mb-0 p-head">Payment</p>
+                        </div>
+                        <div class="bod-bot mt-3 mb-4"></div>
+
+                        <p class="p-o mb-1 fs-6">Pay With:</p>
+                        <div class="form-check form-check-inline cursor-pointer">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                                value="option1" checked>
+                            <label class="form-check-label cursor-pointer" for="inlineRadio1">Card</label>
+                        </div>
+                        <div class="form-check form-check-inline cursor-pointer">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                                value="option2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <label class="form-check-label ac-color cursor-pointer" for="inlineRadio2">Other
+                                Methods</label>
+                        </div>
+
+                        <div class="card-details mt-4">
+                            <div class="row">
+                                <div class="col-lg-12 mb-lg-4 mb-sm-2">
+                                    <p class="p-o mb-2 fs-6">Card Number</p>
+                                    <input type="number" placeholder="1234  5678  9101  1121" class="card-number w-100">
+                                </div>
+                                <div class="col-lg-6">
+                                    <p class="p-o mb-2 fs-6">Expiration Date</p>
+                                    <input type="text" placeholder="MM/YY" class="card-number w-100">
+                                </div>
+                                <div class="col-lg-6">
+                                    <p class="p-o mb-2 fs-6">CVV</p>
+                                    <input type="number" placeholder="123" class="card-number w-100">
+                                </div>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                    <label class="form-check-label ac-color cursor-pointer" for="flexCheckDefault">
+                                        Save card details
+                                    </label>
+                                </div>
+                                <div class="mt-3 pay-button py-3 text-center cursor-pointer cursor-pointer">
+                                    <a class="text-white text-decoration-none fw-bold">Pay USD 59.28</a>
+                                </div>
+                                <p class="airpay-info mt-3 ps-0">
+                                    Your personal data will be used to process your order, support your experience
+                                    throughout this website, and for other purposes described in our privacy policy.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 bod-left">
+                    <div class="order-details pt-2">
+                        <div class="d-flex align-items-center mt-5">
+                            <p class="mb-0 p-head">Order Summary</p>
+                        </div>
+                        <div class="bod-bot mt-3 mb-4"></div>
+
+                        <div class="d-flex align-items-center">
+                            <div class="product-img">
+                                <img src="./assets/images/bag.png" alt="">
+                            </div>
+                            <div class="ms-3">
+                                <div class="d-flex justify-content-between">
+                                    <p class="p-o mb-1">Taxmax Leather Bag</p>
+                                    <p class="p-o mb-1 ms-150">$49.80</p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p class="p-p ac-color">Brown Vegan Leather</p>
+                                    <p class="p-p ac-color">Qty: 2</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bod-bot my-4"></div>
+                        <div class="row">
+                            <div class="col-lg-9 mb-lg-4 mb-sm-2 mt-3">
+                                <input type="text" placeholder="Gift or discount code" class="card-number w-100">
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <div class="card-number text-center cursor-pointer cursor-pointer bg-ac">
+                                    <a class="text-white text-decoration-none">Apply</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bod-bot my-3"></div>
+                        <div class="d-flex justify-content-between">
+                            <p class="p-o mb-1">Sub Total</p>
+                            <p class="p-o mb-1">$49.80</p>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <p class="p-o mb-1">Shipping</p>
+                            <p class="p-o mb-1">$7.24</p>
+                        </div>
+                        <div class="bod-bot my-3"></div>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="p-o mb-1">Total</p>
+                                <p class="p-p ac-color fw-normal">Including $2.24 in taxes</p>
+                            </div>
+                            <div>
+                                <p class="p-o mb-1 fs-1">$59.28</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+
+    <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h1 class="modal-title fs-5 p-o ms-3" id="staticBackdropLabel">Select Payment Method</h1>
+                        <p class="coin-details mb-0 ms-3 fs-6">Payment methods</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="amb d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/images/bank-transfer.png" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header mb-0">Bank Transfer</p>
+                            <p class="coin-details mb-0">Supports 180+ Currencies</p>
+                        </div>
+                    </div>
+                    <div class="amb d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/images/paypal.png" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header mb-0">PayPal</p>
+                            <p class="coin-details mb-0">Only Available in USD</p>
+                        </div>
+                    </div>
+                    <div class="amb d-flex align-items-center px-2 py-2 mb-4" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop2">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/images/airpay.png" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header mb-0">AirPay</p>
+                            <p class="coin-details mb-0">Crypto Payment, Powered by Airdao</p>
+                        </div>
+                    </div>
+                    <div class="amb d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/images/wise.png" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header mb-0">Wise</p>
+                            <p class="coin-details mb-0">Instant Payments. Supports 7+ Currencies</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mb-4 mt-2">
+                        <p class="mb-0 p-foot ac-color">Payment With</p>
+                        <img src="./assets/images/airdao.svg" class="i-width" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+                <div class="modal-content">
+                    <div class="modal-header" style="border: none;">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="coin-details text-center ms-2 mb-1">Send <span class="text-black">1400.03</span> <span
+                                class="text-black">AST</span> to:</p>
+                        <p class="p-p ac-color mb-1 text-center fs-3">Wallet Address</p>
+                        <p class="p-o mb-1 text-center">
+                            Ox374sgtywue464775849djgff
+                            <i class="bi bi-copy cursor-pointer copy-icon2"></i>
+                            <span class="tooltip-text2">Copy to Clipboard</span>
+                        </p>
+                        <p class="coin-details text-center">Or Scan Qr</p>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <img src="./assets/images/qrcode.png" alt="">
+                        </div>
+                        <p class="coin-details text-center mt-2">Expires in <span class="text-danger timer">10:00</span>
+                            minutes</p>
+
+                        <div class="d-flex justify-content-center">
+                            <a href="order-confirmation.html" class="suc-payment text-white text-decoration-none">I have
+                                Made Payment</a>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center mb-4 mt-2">
+                        <p class="mb-0 p-foot ac-color">Payment With</p>
+                        <img src="./assets/images/airdao.svg" class="i-width" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="./js/script.js"></script>
+        <script src="./js/direct-payment.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+            integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+            crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
