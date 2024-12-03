@@ -16,12 +16,14 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <title>AirPay | Home</title>
 </head>
 
 <body>
     <header>
-        <nav class="navbar bg-white mt-lg-3">
+        <nav class="navbar bg-white mt-lg-3" data-aos="slide-down">
             <div class="container">
                 <a class="navbar-brand" href="index.html">
                     <img src="./assets/icons/airpay.svg" alt="Logo" class="d-inline-block">
@@ -32,8 +34,8 @@
     <section class="first mb-lg-3">
         <div class="container">
             <div class="row">
-                <div class="col-lg-7">
-                    <div class="mt-5">
+                <div class="col-lg-7" data-aos="slide-right">
+                    <div class="mt-lg-5 mt-sm-3">
                         <h2 class="head-text mt-3">
                             One Infrastructure, Seamless payment</h2>
                     </div>
@@ -48,7 +50,7 @@
                         <img src="./assets/images/airdao.svg" alt="">
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-5" data-aos="slide-left">
                     <div class="head-img d-flex justify-content-center">
                         <img src="./assets/images/eth-img.png" alt="" class="w-60">
                     </div>
@@ -59,8 +61,8 @@
     <section class="second mb-lg-5">
         <div class="container">
             <div class="row">
-                <p class="p-o mb-lg-5 text-center text-underline">Demo</p>
-                <div class="col-lg-3">
+                <p class="p-o mb-lg-5 text-center text-underline dems">Demo</p>
+                <div class="col-lg-3" data-aos="slide-up">
                     <a href="e-commerce.html" class="aa text-decoration-none">
                         <div class="uses">
                             <img src="./assets/images/ecommerce.png" alt="">
@@ -69,7 +71,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" data-aos="slide-up">
                     <a href="direct-payment.html" class="aa text-decoration-none">
                         <div class="uses">
                             <img src="./assets/images/direct-payment.png" alt="">
@@ -78,7 +80,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" data-aos="slide-up">
                     <a href="charity-payment.html" class="aa text-decoration-none">
                         <div class="uses">
                             <img src="./assets/images/donation-charity.png" alt="">
@@ -87,7 +89,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-3" data-aos="slide-up">
                     <a href="https://airpay-plum.vercel.app/bulk-payment" class="aa text-decoration-none">
                         <div class="uses">
                             <img src="./assets/images/bulk-payment.png" alt="">
@@ -100,6 +102,12 @@
         </div>
     </section>
 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1200
+        });
+    </script>
     <script src="./js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
