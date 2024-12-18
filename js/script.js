@@ -1,3 +1,75 @@
+
+$(".signup-carousel").owlCarousel({
+    loop: true,
+    margin: 10,
+    nav: true,
+    dots: true,
+    autoplay: true,
+    autoplayTimeout: 3000,
+    responsive: {
+      0: {
+        items: 1,
+      },
+    },
+  });
+
+// INCREMENT YEAR CODE
+const minusBtn = document.getElementById('minusBtn');
+    const plusBtn = document.getElementById('plusBtn');
+    const yearDisplay = document.getElementById('yearDisplay');
+    let years = 1;
+
+    // Function to update the display and button states
+    const updateDisplay = () => {
+      yearDisplay.textContent = `${years} Year${years > 1 ? 's' : ''}`;
+      if (years === 1) {
+        minusBtn.disabled = true;
+        minusBtn.classList.add('disabled');
+      } else {
+        minusBtn.disabled = false;
+        minusBtn.classList.remove('disabled');
+      }
+    };
+
+    // Increment years
+    plusBtn.addEventListener('click', () => {
+      years++;
+      updateDisplay();
+    });
+
+    // Decrement years
+    minusBtn.addEventListener('click', () => {
+      if (years > 1) {
+        years--;
+        updateDisplay();
+      }
+    });
+
+    // Initial update
+    updateDisplay();
+
+    // TOOGLE DISPLAY
+
+        const getName = document.getElementById("getName");
+        const findName = document.getElementById("findName");
+        const registerName = document.getElementById("registerName");
+        const back = document.querySelector(".back");
+      
+        // Toggle to show registerName and hide findName
+        getName.addEventListener("click", (event) => {
+          event.preventDefault(); // Prevent default anchor behavior
+          findName.style.display = "none";
+          registerName.style.display = "block";
+        });
+      
+        // Toggle back to show findName and hide registerName
+        back.addEventListener("click", () => {
+          registerName.style.display = "none";
+          findName.style.display = "block";
+        });
+
+      
+
 document.addEventListener("DOMContentLoaded", function () {
     // Countdown Timer
     const modal = document.getElementById("staticBackdrop");
@@ -67,5 +139,5 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-    
+       
 });

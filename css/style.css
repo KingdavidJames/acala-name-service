@@ -16,11 +16,8 @@ body {
 .head-text {
     font-size: 70px;
     font-weight: 600;
-    background: radial-gradient(76.07% 76.07% at 68.87% 78.16%, #3568DD 0%, #1D3877 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    line-height: 85px;
+    color: black;
+    line-height: 75px;
 }
 
 .head-p {
@@ -265,3 +262,191 @@ body {
 .bg-ac{
     background-color: #acacac;
 }
+
+
+/* =============================== */
+.con-bot{
+    color: #2F80ED;
+    border: 1px solid #2F80ED;
+    border-radius: 12px;
+    padding: 12px 30px;
+}
+.yn{
+    color: #084596;
+    background-color: #C9E0FF;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.getName{
+    color: white;
+    text-transform: capitalize;
+    background-color: #011B3E;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+.conta{
+    padding: 60px 90px;
+    height: 100vh;
+}
+.signup-carousel{
+    margin-top: 100px;
+}
+.s-caro {
+    padding: 0px 20px 10px 0px;
+  }
+  .s-caro-img img {
+    width: 170px !important;
+  }
+  .s-caro > h3 {
+    text-align: start;
+    font-size: 25px;
+    font-weight: 700;
+  }
+  .s-caro > p {
+    color: #000;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: normal;
+    margin-bottom: 0px !important;
+  }
+  .signup-carousel .owl-nav {
+    display: none !important;
+  }
+  .signup-carousel .owl-dots {
+    display: block !important;
+    margin-bottom: 20px;
+  }
+  .owl-theme .owl-dots .owl-dot span {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  .owl-theme .owl-dots .owl-dot.active span {
+    background: #2F80ED !important;
+  }
+  .owl-theme .owl-dots, .owl-theme .owl-nav {
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+}
+.bg-d9{
+    background-color: #F5F9FF;
+}
+.search-box > img {
+    position: absolute;
+    right: 34.9rem;
+    top: 24.1em;
+    margin: 10px 15px;
+}
+.search-input {
+    border-radius: 30px;
+    border: 1px solid #002E6C;
+    padding: 20px 65px;
+    background-color: transparent;
+    width: 100%;
+    font-size: 14px;
+}
+.mt-100{
+    margin-top: 150px;
+}
+.available-name{
+    background-color: #A0FEC9;
+    padding: 12px 25px;
+    border-radius: 10px;
+    border: 1px solid #02934120;
+}
+.available-name > a{
+    background-color: #029341;
+    padding: 5px 8px;
+    border-radius: 8px;
+}
+.text-green{
+    color: #066E33;
+}
+.fs-7{
+    font-size: 14px;
+}
+[type=search] {
+    -webkit-appearance: textfield;
+    outline-offset: 0px;
+}
+.unavailable-name{
+    background-color: #FF9CAB;
+    padding: 12px 25px;
+    border-radius: 10px;
+    border: 1px solid #02934120;
+}
+.text-red{
+    color: #8E071B;
+}
+.year-container {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    border: 1px solid #ACACAC;
+    border-radius: 50px;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 500;
+    color: #011B3E;
+  }
+
+  .btn-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    font-size: 27px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .btn-minus {
+    left: 30px;
+    background-color: #CCC9C9;
+    color: #fff;
+  }
+
+  .btn-minus.disabled {
+    background-color: #CCC9C9;
+    color: #fff;
+    cursor: not-allowed;
+  }
+
+  .btn-plus {
+    right: 30px;
+    background-color: #011B3E;
+    color: white;
+  }
+
+  .btn-plus:hover {
+    background-color: #011b3e97;
+  }
+  .year-details{
+    color: #acacac;
+  }
+  .total-calc{
+    border: 1px solid #6CABFF;
+    padding: 30px 40px;
+    border-radius: 20px;
+    margin-top: 40px;
+    background-color: #EFF6FF;
+  }
+  .p-year{
+    color: #6E6F71;
+  }
+  .pay{
+    border-radius: 70px;
+    background-color: #011B3E;
+    padding: 20px ;
+  }
+  .fs-8{
+    font-size: 10px;
+  }
