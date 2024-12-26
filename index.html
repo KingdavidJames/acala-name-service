@@ -31,11 +31,16 @@
     <header>
         <nav class="navbar bg-white mt-lg-5" data-aos="slide-down">
             <div class="container">
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand cursor-pointer" href="index.html">
                     <img src="./assets/icons/logo-ex.svg" alt="Logo" class="d-inline-block">
                 </a>
                 <ul class="ms-auto">
-                    <a href="#" class="con-bot text-decoration-none">Connect Wallet</a>
+                    <a href="#" class="con-bot text-decoration-none" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">Connect Wallet</a>
+                    <div class="d-flex walletshow align-items-center d-none justify-content-center">
+                        <img src="./assets/images/wallet-icon.png" alt="">
+                        <div class="mb-0 fw-light ms-1">Ox374.....djgff</div>
+                    </div>
                 </ul>
             </div>
         </nav>
@@ -45,15 +50,20 @@
             <div class="row mt-4">
                 <div class="col-lg-7" data-aos="slide-right">
                     <div class="mt-lg-5 mt-sm-3">
+                        <span class="grimmers position-absolute">Grimmers.amb</span>
+                        <span class="grimmers position-absolute" id="kobby">Kobby.amb</span>
+                        <span class="grimmers position-absolute" id="john">John.amb</span>
+                        <span class="grimmers position-absolute" id="nothing">Nothing.amb</span>
                         <h2 class="head-text mt-3">
                             Simplify Your Blockchain Identity</h2>
                     </div>
                     <div class="mt-4 head-p">
-                        <p class="text-black">
+                        <p class="text-black2">
                             Attach a unique, human-readable name to your wallet address and eliminate the hassle of
                             long, complex strings. With AND, sending and receiving crypto becomes seamless, error-free,
                             and more personal. Say goodbye to copying and pasting endless characters—your wallet address
-                            can now look like <span class="yn">yourname.amb</span> making transactions faster and more trustworthy.
+                            can now look like <span class="yn">yourname.amb</span> making transactions faster and more
+                            trustworthy.
                         </p>
                     </div>
                     <div class="mt-5">
@@ -72,6 +82,57 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal -->
+
+    <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h1 class="modal-title fs-5 p-o ms-3" id="staticBackdropLabel">Select Wallet Type</h1>
+                        <p class="coin-details mb-0 ms-3 fs-6">Wallet Type</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-6 py-4">
+                    <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/icons/wallet.svg" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header fs-6 text-black mb-0">Browser Wallet</p>
+                        </div>
+                    </div>
+                    <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/icons/airdao-w.svg" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header fs-6 text-black mb-0">Airdao Wallet</p>
+                        </div>
+                    </div>
+                    <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/icons/metamask.svg" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header fs-6 text-black mb-0">MetaMask</p>
+                        </div>
+                    </div>
+                    <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4">
+                        <div class="me-2 ms-2">
+                            <img src="./assets/icons/coinbase.svg" alt="">
+                        </div>
+                        <div class="">
+                            <p class="coin-header fs-6 text-black mb-0">CoinBase</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>

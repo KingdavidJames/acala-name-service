@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/responsive.css">
     <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
-
 </head>
 
 <body>
@@ -101,15 +100,19 @@
                 </div>
                 <form class="d-flex search-box" id="sb" role="search">
                     <img src="./assets/images/search-normal.png" alt="">
-                    <input class="me-2 search-input" type="search" id="dynamic_searchbar" aria-label="Search">
+                    <input class="me-2 search-input" type="search" id="dynamic_searchbar" placeholder="E.g JohnDoe.amb" aria-label="Search">
                     <div id="dropdown" class="dropdown-content"></div>
                 </form>
-                <div class="available-name mt-4 d-flex justify-content-between align-items-center">
-                    <p class="mb-0">Nothing.amb is <span class="text-green fw-medium">Available</span></p>
-                    <a href="#" id="getName" class="text-decoration-none text-white fs-7">Get Name</a>
+                <div id="availableName">
+                    <div class="available-name mt-4 d-flex justify-content-between align-items-center">
+                        <p class="mb-0">Nothing.amb is <span class="text-green fw-medium">Available</span></p>
+                        <a href="#" id="getName" class="text-decoration-none text-white fs-7">Get Name</a>
+                    </div>
                 </div>
-                <div class="unavailable-name mt-4 d-flex justify-content-between align-items-center">
-                    <p class="mb-0">Nothing.amb is <span class="text-red fw-medium">Taken</span></p>
+                <div id="unAvailableName">
+                    <div class="unavailable-name mt-4 d-flex justify-content-between align-items-center">
+                        <p class="mb-0">Nothing.amb is <span class="text-red fw-medium">Taken</span></p>
+                    </div>
                 </div>
             </div>
 
@@ -194,7 +197,7 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-center mb-4 mt-2">
                     <p class="mb-0 p-foot ac-color">Payment With</p>
-                    <img src="./assets/images/airdao.png" class="i-width" alt="">
+                    <img src="./assets/icons/airdao.svg" class="i-width" alt="">
                 </div>
             </div>
         </div>
@@ -209,6 +212,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+        <script src="./js/find-identity.js"></script>
     <script src="./js/script.js"></script>
 </body>
 
