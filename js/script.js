@@ -1,43 +1,81 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Select all modal buttons
-  const modalButtons = document.querySelectorAll(".md-but");
+  const conBot = document.querySelector(".con-bot");       // "Connect Wallet" link
+  const walletShow = document.querySelector(".walletshow"); 
+  const modalButtons = document.querySelectorAll(".md-but"); 
   const body = document.body;
-  const conBot = document.querySelector(".con-bot");
-  const walletShow = document.querySelector(".walletshow");
 
-  // Add click event listeners to modal buttons
+  // === 1) Check if wallet is in localStorage and valid (within 1 hour) ===
+  const savedWalletConnected = localStorage.getItem("walletConnected");     // "true" or null
+  const savedWalletAddress   = localStorage.getItem("walletAddress");       // e.g. "Ox374.....djgff"
+  const savedConnectTime     = localStorage.getItem("walletConnectTime");   // e.g. "1693408350000"
+
+  if (savedWalletConnected && savedWalletAddress && savedConnectTime) {
+    const now = Date.now();
+    const oneHourInMs = 60 * 60 * 1000; // 3600000 ms
+
+    if ((now - parseInt(savedConnectTime, 10)) <= oneHourInMs) {
+      // If less than 1 hour since last connect, show the wallet as connected
+      conBot.classList.add("d-none");
+      walletShow.classList.remove("d-none");
+      // Optionally fill in the address if you have an element for it
+      walletShow.querySelector("div.mb-0.fw-light.ms-1").textContent = savedWalletAddress;
+    } else {
+      // More than 1 hour old, clear local storage
+      localStorage.removeItem("walletConnected");
+      localStorage.removeItem("walletAddress");
+      localStorage.removeItem("walletConnectTime");
+      // Show the connect button (default)
+      conBot.classList.remove("d-none");
+      walletShow.classList.add("d-none");
+    }
+  } else {
+    // Default: not connected
+    conBot.classList.remove("d-none");
+    walletShow.classList.add("d-none");
+  }
+
+  // === 2) Handle Modal Buttons ===
+  //    On click, we simulate connecting a wallet, hide the modal, show spinner, etc.
   modalButtons.forEach(button => {
-      button.addEventListener("click", () => {
-          // Close the modal
-          const modal = document.querySelector("#staticBackdrop");
-          if (modal) {
-              const modalInstance = bootstrap.Modal.getInstance(modal);
-              modalInstance.hide();
-          }
+    button.addEventListener("click", () => {
+      // Close the modal
+      const modal = document.querySelector("#staticBackdrop");
+      if (modal) {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        modalInstance.hide();
+      }
 
-          // Create a spinner element
-          const spinner = document.createElement("div");
-          spinner.className = "position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75";
-          spinner.innerHTML = `
-              <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
-              </div>
-          `;
-          body.appendChild(spinner);
+      // Create a spinner overlay
+      const spinner = document.createElement("div");
+      spinner.className = "position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75";
+      spinner.innerHTML = `
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      `;
+      body.appendChild(spinner);
 
-          // Simulate processing delay
-          setTimeout(() => {
-              // Remove the spinner
-              body.removeChild(spinner);
+      // Simulate a 2-second delay
+      setTimeout(() => {
+        body.removeChild(spinner);
 
-              // Hide the connect button and show the wallet display
-              conBot.classList.add("d-none");
-              walletShow.classList.remove("d-none");
-          }, 2000); // Adjust delay as needed
-      });
+        // Hide the connect button and show the wallet display
+        conBot.classList.add("d-none");
+        walletShow.classList.remove("d-none");
+
+        // === 3) Save "connected" state in localStorage ===
+        // We'll store a placeholder wallet address, e.g. "Ox374.....djgff"
+        localStorage.setItem("walletConnected", "true");
+        localStorage.setItem("walletAddress", "Ox374.....djgff");
+        localStorage.setItem("walletConnectTime", Date.now().toString()); // store timestamp
+      }, 2000);
+    });
   });
 });
+
+
+
 $(".signup-carousel").owlCarousel({
   loop: true,
   margin: 10,

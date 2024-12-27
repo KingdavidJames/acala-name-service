@@ -1,19 +1,28 @@
 /*************************************
  * Simulated CSV Data (in-memory)
  *************************************/
+
+// Merge localStorage 'takenNames' with our default array
+const storedTakenNames = JSON.parse(localStorage.getItem("takenNames")) || [];
 let takenNames = [
-    // Example of taken names:
-    "james.amb",
-    "nothing.amb",
-    "sambo.amb",
-    "spencer.amb",
-    "yhubee.amb",
-    "bobthebuilder.amb",
-    "enene.amb",
-    "praiz.amb",
-    "precious.amb",
-    // "alex.amb"
+  // your default taken names here...
 ];
+// Merge them
+takenNames = [...takenNames, ...storedTakenNames];
+
+// let takenNames = [
+//     // Example of taken names:
+//     "james.amb",
+//     "nothing.amb",
+//     "sambo.amb",
+//     "spencer.amb",
+//     "yhubee.amb",
+//     "bobthebuilder.amb",
+//     "enene.amb",
+//     "praiz.amb",
+//     "precious.amb",
+//     // "alex.amb"
+// ];
 
 const searchInput = document.getElementById("dynamic_searchbar");
 const availableDiv = document.getElementById("availableName");
@@ -134,6 +143,9 @@ const pYearEls = document.querySelectorAll(".p-year");
 // The second one is "Est. network fee" with price
 // The third row is total
 
+// The <span> in the modal where we show the total
+const modalTotalAMBEl = document.getElementById("modalTotalAMB");
+
 let yearCount = 1;
 let basePrice = 100;      // 100 AMB
 let networkFee = 2;       // 2 AMB
@@ -170,6 +182,12 @@ function setYearCount(value) {
     pYearEls[1].textContent = `${totalNamePrice} AMB`;
     pYearEls[3].textContent = `${totalNetworkFee} AMB`;
     pYearEls[5].textContent = `${total} AMB`;
+
+      // ===> Update the modal’s total <===
+  if (modalTotalAMBEl) {
+    modalTotalAMBEl.textContent = total;
+  }
+
 
     // For minus button enable/disable
     if (yearCount <= 1) {
@@ -263,6 +281,28 @@ iHavePaidBtn.addEventListener("click", function (event) {
             }, 2000); // Adjust delay as needed
         });
     });
+
+    // This is your chosen name displayed on the registration page:
+
+iHavePaidBtn.addEventListener("click", function (event) {
+  // The user’s chosen name:
+  const justRegisteredName = nameChosenEl.textContent.toLowerCase();
+
+  // 1) Add to your in-memory array
+  if (!takenNames.includes(justRegisteredName)) {
+    takenNames.push(justRegisteredName);
+    console.log("Updated takenNames array:", takenNames);
+  }
+
+  // 2) Save updated array to localStorage so it persists
+  localStorage.setItem("takenNames", JSON.stringify(takenNames));
+
+  // 3) Also save the "justRegisteredName" so the next page (success page) can display it
+  localStorage.setItem("chosenName", justRegisteredName);
+
+  // 4) Let the link navigate to order-success.html as usual
+  //    (Or if you’re preventing default, you can redirect manually)
+});
 
 $(".signup-carousel").owlCarousel({
     loop: true,
