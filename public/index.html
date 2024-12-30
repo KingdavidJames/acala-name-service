@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AirDAO Name Service" />
+    <meta property="og:description" content="Simplify Your Blockchain Identity" />
+    <meta property="og:url" content="Attach a unique, human-readable name to your wallet address and eliminate the hassle of
+    long, complex strings. With AND, sending and receiving crypto becomes seamless, error-free,
+    and more personal." />
+    <meta property="og:image" content="https://airdaons.vercel.app/assets/icons/ans-logo.svg" />
+    <meta property="og:site name" content="AirDAO Name Service" />
+    <meta property="og:locale" content="en US" />
+    <link rel="shortcut icon" href="./assets/icons/single-logo.svg" type="image/x-icon">
+    <title>Home | AirDAO Name Service - ANS </title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar bg-white mt-lg-5">
+            <div class="container">
+                <a class="navbar-brand cursor-pointer" href="index.html">
+                    <img src="./assets/icons/logo-ex.svg" alt="Logo" class="d-inline-block">
+                </a>
+                <ul class="ms-auto">
+                    <a href="#" class="con-bot text-decoration-none">Connect Wallet</a>
+                    <div class="d-flex walletshow align-items-center d-none justify-content-center">
+                        <img src="./assets/images/wallet-icon.png" alt="">
+                        <div class="mb-0 fw-light ms-1"></div>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section class="first mb-lg-3">
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col-lg-7">
+                    <div class="mt-lg-5 mt-sm-3">
+                        <span class="grimmers position-absolute">Grimmers.amb</span>
+                        <span class="grimmers position-absolute" id="kobby">Kobby.amb</span>
+                        <span class="grimmers position-absolute" id="john">John.amb</span>
+                        <span class="grimmers position-absolute" id="nothing">Nothing.amb</span>
+                        <h2 class="head-text mt-3">
+                            Simplify Your Blockchain Identity</h2>
+                    </div>
+                    <div class="mt-4 head-p">
+                        <p class="text-black2">
+                            Attach a unique, human-readable name to your wallet address and eliminate the hassle of
+                            long, complex strings. With AND, sending and receiving crypto becomes seamless, error-free,
+                            and more personal. Say goodbye to copying and pasting endless characters—your wallet address
+                            can now look like <span class="yn">yourname.amb</span> making transactions faster and more
+                            trustworthy.
+                        </p>
+                    </div>
+                    <div class="mt-5">
+                        <a href="find-identity.html" class="getName text-decoration-none">Get your name now</a>
+                    </div>
+                    <div class="mt-4">
+                        <a href="decrypt-name.html" class="getName text-decoration-none">Decrypt Name</a>
+                    </div>
+                    <div class="mt-4">
+                        <a href="test-ans-transfer.html" class="getName text-decoration-none">Test ANS Transfer</a>
+                    </div>
+                    <div class="mt-5 d-flex align-items-center">
+                        <p class="mb-0 ac-color">Integrated for</p>&nbsp;
+                        <img src="./assets/icons/airdao.svg" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-5 mt-3">
+                    <div class="head-img d-flex justify-content-center">
+                        <img src="./assets/icons/gphoto.svg" alt="" class="w-0">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const connectButton = document.querySelector('.con-bot');
+        const walletDisplay = document.querySelector('.walletshow');
+
+        const AIRDAO_TESTNET_CHAIN_ID = '0x5618'; // AirDAO Testnet (22040 in hexadecimal)
+
+        /**
+         * Connect to MetaMask and switch to AirDAO Testnet.
+         */
+        async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('MetaMask is not installed. Please install MetaMask and try again.');
+                return;
+            }
+
+            const chainId = '0x5618'; // AirDAO Testnet (22040 in hexadecimal)
+
+            try {
+                // Request accounts
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const walletAddress = accounts[0];
+
+                // Try adding the chain to MetaMask
+                try {
+                    await ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: chainId,
+                                chainName: 'AirDAO Testnet',
+                                rpcUrls: ['https://network.ambrosus-test.io'],
+                                nativeCurrency: {
+                                    name: 'Amber Testnet',
+                                    symbol: 'AMB',
+                                    decimals: 18,
+                                },
+                                blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
+                            },
+                        ],
+                    });
+                } catch (addChainError) {
+                    console.error('Error adding the chain:', addChainError);
+                    alert('Failed to add AirDAO Testnet to MetaMask. Please try again.');
+                    return;
+                }
+
+                // Switch to AirDAO Testnet
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: chainId }],
+                });
+
+                // Save connection state
+                localStorage.setItem('connectedWallet', walletAddress);
+
+                // Update UI
+                updateUI(walletAddress);
+            } catch (error) {
+                console.error('Error connecting wallet:', error);
+                alert('Failed to connect wallet. Please try again.');
+            }
+        }
+
+        /**
+         * Disconnect the wallet by clearing localStorage.
+         */
+        function disconnectWallet() {
+            // Clear connection state
+            localStorage.removeItem('connectedWallet');
+
+            // Update UI
+            updateUI(null);
+        }
+
+        /**
+         * Update UI based on the connection state.
+         * @param {string|null} walletAddress - The connected wallet address or null if disconnected.
+         */
+        function updateUI(walletAddress) {
+            if (walletAddress) {
+                connectButton.textContent = 'Disconnect';
+                connectButton.onclick = disconnectWallet;
+                walletDisplay.classList.remove('d-none');
+                walletDisplay.querySelector('div').textContent = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+            } else {
+                connectButton.textContent = 'Connect Wallet';
+                connectButton.onclick = connectWallet;
+                walletDisplay.classList.add('d-none');
+            }
+        }
+
+        /**
+         * Check connection state on page load.
+         */
+        function checkConnection() {
+            const connectedWallet = localStorage.getItem('connectedWallet');
+            if (connectedWallet) {
+                updateUI(connectedWallet);
+            } else {
+                updateUI(null);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', checkConnection);
+    </script>
+</body>
+
+</html>
