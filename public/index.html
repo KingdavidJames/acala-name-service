@@ -35,11 +35,11 @@
                 <a class="navbar-brand cursor-pointer" href="index.html">
                     <img src="./assets/icons/logo-ex.svg" alt="Logo" class="d-inline-block">
                 </a>
-                <ul class="ms-auto">
+                <ul class="ms-auto d-flex">
                     <a href="#" class="con-bot text-decoration-none">Connect Wallet</a>
-                    <div class="d-flex walletshow align-items-center d-none justify-content-center">
+                    <div class="d-flex walletshow align-items-center d-none justify-content-center ms-3">
                         <img src="./assets/images/wallet-icon.png" alt="">
-                        <div class="mb-0 fw-light ms-1"></div>
+                        <div class="mb-0 fw-light ms-1 wallet-address"></div>
                     </div>
                 </ul>
             </div>
@@ -60,21 +60,22 @@
                     <div class="mt-4 head-p">
                         <p class="text-black2">
                             Attach a unique, human-readable name to your wallet address and eliminate the hassle of
-                            long, complex strings. With AND, sending and receiving crypto becomes seamless, error-free,
+                            long, complex strings. With ANS, sending and receiving crypto becomes seamless, error-free,
                             and more personal. Say goodbye to copying and pasting endless characters—your wallet address
                             can now look like <span class="yn">yourname.amb</span> making transactions faster and more
                             trustworthy.
                         </p>
                     </div>
-                    <div class="mt-5">
-                        <a href="find-identity.html" class="getName text-decoration-none">Get your name now</a>
+                    <div class="mt-5 d-flex align-items-center">
+                        <span class="me-3"> <a class="getName text-decoration-none" href="find-identity.html">Get Your Name Now</a></span>
+                        <span class="me-3">
+                            <a href="decrypt-name.html" class="getName text-decoration-none">Decrypt Name</a>
+                        </span>
+                        <span class="me-3">
+                            <a href="test-transfer.html" class="getName text-decoration-none">Test ANS Transfer</a>
+                        </span>
                     </div>
-                    <div class="mt-4">
-                        <a href="decrypt-name.html" class="getName text-decoration-none">Decrypt Name</a>
-                    </div>
-                    <div class="mt-4">
-                        <a href="test-transfer.html" class="getName text-decoration-none">Test ANS Transfer</a>
-                    </div>
+
                     <div class="mt-5 d-flex align-items-center">
                         <p class="mb-0 ac-color">Integrated for</p>&nbsp;
                         <img src="./assets/icons/airdao.svg" alt="">
@@ -89,112 +90,7 @@
         </div>
     </section>
 
-    <script>
-        const connectButton = document.querySelector('.con-bot');
-        const walletDisplay = document.querySelector('.walletshow');
-
-        const AIRDAO_TESTNET_CHAIN_ID = '0x5618'; // AirDAO Testnet (22040 in hexadecimal)
-
-        /**
-         * Connect to MetaMask and switch to AirDAO Testnet.
-         */
-        async function connectWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                alert('MetaMask is not installed. Please install MetaMask and try again.');
-                return;
-            }
-
-            const chainId = '0x5618'; // AirDAO Testnet (22040 in hexadecimal)
-
-            try {
-                // Request accounts
-                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                const walletAddress = accounts[0];
-
-                // Try adding the chain to MetaMask
-                try {
-                    await ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [
-                            {
-                                chainId: chainId,
-                                chainName: 'AirDAO Testnet',
-                                rpcUrls: ['https://network.ambrosus-test.io'],
-                                nativeCurrency: {
-                                    name: 'Amber Testnet',
-                                    symbol: 'AMB',
-                                    decimals: 18,
-                                },
-                                blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
-                            },
-                        ],
-                    });
-                } catch (addChainError) {
-                    console.error('Error adding the chain:', addChainError);
-                    alert('Failed to add AirDAO Testnet to MetaMask. Please try again.');
-                    return;
-                }
-
-                // Switch to AirDAO Testnet
-                await ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: chainId }],
-                });
-
-                // Save connection state
-                localStorage.setItem('connectedWallet', walletAddress);
-
-                // Update UI
-                updateUI(walletAddress);
-            } catch (error) {
-                console.error('Error connecting wallet:', error);
-                alert('Failed to connect wallet. Please try again.');
-            }
-        }
-
-        /**
-         * Disconnect the wallet by clearing localStorage.
-         */
-        function disconnectWallet() {
-            // Clear connection state
-            localStorage.removeItem('connectedWallet');
-
-            // Update UI
-            updateUI(null);
-        }
-
-        /**
-         * Update UI based on the connection state.
-         * @param {string|null} walletAddress - The connected wallet address or null if disconnected.
-         */
-        function updateUI(walletAddress) {
-            if (walletAddress) {
-                connectButton.textContent = 'Disconnect';
-                connectButton.onclick = disconnectWallet;
-                walletDisplay.classList.remove('d-none');
-                walletDisplay.querySelector('div').textContent = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-            } else {
-                connectButton.textContent = 'Connect Wallet';
-                connectButton.onclick = connectWallet;
-                walletDisplay.classList.add('d-none');
-            }
-        }
-
-        /**
-         * Check connection state on page load.
-         */
-        function checkConnection() {
-            const connectedWallet = localStorage.getItem('connectedWallet');
-            if (connectedWallet) {
-                updateUI(connectedWallet);
-            } else {
-                updateUI(null);
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', checkConnection);
-    </script>
+    <script src="./js/index.js"></script>
 </body>
 
 </html>

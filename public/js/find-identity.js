@@ -5,34 +5,21 @@
 // Merge localStorage 'takenNames' with our default array
 const storedTakenNames = JSON.parse(localStorage.getItem("takenNames")) || [];
 let takenNames = [
-  // your default taken names here...
+    // Add any default taken names here, if applicable
 ];
 // Merge them
 takenNames = [...takenNames, ...storedTakenNames];
 
-// let takenNames = [
-//     // Example of taken names:
-//     "james.amb",
-//     "nothing.amb",
-//     "sambo.amb",
-//     "spencer.amb",
-//     "yhubee.amb",
-//     "bobthebuilder.amb",
-//     "enene.amb",
-//     "praiz.amb",
-//     "precious.amb",
-//     // "alex.amb"
-// ];
-
+// DOM Elements for Name Search and Registration
 const searchInput = document.getElementById("dynamic_searchbar");
 const availableDiv = document.getElementById("availableName");
 const unavailableDiv = document.getElementById("unAvailableName");
 const getNameLink = document.getElementById("getName");
 
-// For spinner
+// Spinner Element
 let spinner = null;
 
-// For registration:
+// Registration Elements
 const registerNameDiv = document.getElementById("registerName");
 const findNameDiv = document.getElementById("findName");
 const nameChosenEl = document.getElementById("nameChosen");
@@ -112,11 +99,19 @@ searchInput.addEventListener("keydown", function (e) {
 getNameLink.addEventListener("click", function (e) {
     e.preventDefault();
 
+    // Ensure the name is available
+    if (availableDiv.style.display !== "flex") {
+        alert("The selected name is not available.");
+        return;
+    }
+
     // Grab the current displayed name from the availableDiv
-    let text = availableDiv.querySelector("p").textContent;
+    let text = availableDiv.querySelector("p").innerHTML;
     // Example text: "something.amb is Available"
     // We just want the name up to the " is "
-    let chosenName = text.split(" is ")[0];
+    let tempDiv = document.createElement("div");
+    tempDiv.innerHTML = text;
+    let chosenName = tempDiv.textContent.split(" is ")[0];
 
     // Put that name in the #nameChosen element
     nameChosenEl.textContent = chosenName;
@@ -139,23 +134,16 @@ const yearDetails = document.querySelector(".year-details span");
 
 // Price references in the total-calc
 const pYearEls = document.querySelectorAll(".p-year");
-// The first one is "1 year registration" with price
-// The second one is "Est. network fee" with price
-// The third row is total
-
 // The <span> in the modal where we show the total
 const modalTotalAMBEl = document.getElementById("modalTotalAMB");
 
 let yearCount = 1;
-let basePrice = 100;      // 100 AMB
-let networkFee = 2;       // 2 AMB
+let basePrice = 8;      // 8 AMB per year
+let networkFee = 2;     // 2 AMB per year
 
 function setYearCount(value) {
     yearCount = value;
-    yearDisplay.textContent = `${yearCount} Year`;
-    if (yearCount > 1) {
-        yearDisplay.textContent += "s";
-    }
+    yearDisplay.textContent = `${yearCount} Year${yearCount > 1 ? "s" : ""}`;
 
     // Also update the "x year registration" below the +/- control
     yearDetails.textContent = `${yearCount}`;
@@ -166,28 +154,19 @@ function setYearCount(value) {
     const total = totalNamePrice + totalNetworkFee;
 
     // Update the text in the .total-calc
-    // pYearEls[0]: "1 year registration" -> needs to show "yearCount year registration" and "totalNamePrice AMB"
-    // pYearEls[1]: "Est. network fee" -> show "totalNetworkFee AMB"
-    // pYearEls[2] -> The total row
-    // (But watch out, we have multiple <p class="p-year fw-medium"> in the markup.)
-
-    // We'll rely on index order from the HTML you posted:
-    //   [0] => "1 year registration" text
-    //   [1] => "1 year registration" price (100 AMB)
-    //   [2] => "Est. network fee" text
-    //   [3] => "2 AMB"
-    //   [4] => "Total" text
-    //   [5] => "102 AMB"
+    // Assuming pYearEls are ordered correctly
+    // Update the registration and fees
     pYearEls[0].textContent = `${yearCount} year registration`;
     pYearEls[1].textContent = `${totalNamePrice} AMB`;
+    pYearEls[2].textContent = `Est. network fee`;
     pYearEls[3].textContent = `${totalNetworkFee} AMB`;
+    pYearEls[4].textContent = `Total`;
     pYearEls[5].textContent = `${total} AMB`;
 
-      // ===> Update the modal’s total <===
-  if (modalTotalAMBEl) {
-    modalTotalAMBEl.textContent = total;
-  }
-
+    // Update the modal’s total <span>
+    if (modalTotalAMBEl) {
+        modalTotalAMBEl.textContent = total;
+    }
 
     // For minus button enable/disable
     if (yearCount <= 1) {
@@ -216,94 +195,31 @@ plusBtn.addEventListener("click", function () {
  * "I have made payment" button logic
  * (in the modal)
  *************************************/
-// In your HTML, the button with class .suc-payment points to "order-success.html" 
-// for demonstration. We'll intercept the click here to update our CSV array.
-
 const iHavePaidBtn = document.querySelector(".suc-payment");
 iHavePaidBtn.addEventListener("click", function (event) {
-    // The name chosen is in nameChosenEl
+    // The user’s chosen name:
     const justRegisteredName = nameChosenEl.textContent.toLowerCase();
 
-    // Simulate appending to the CSV:
+    // 1) Add to your in-memory array
     if (!takenNames.includes(justRegisteredName)) {
         takenNames.push(justRegisteredName);
         console.log("Updated takenNames array:", takenNames);
     }
 
-    // In a real scenario, you’d do a POST or fetch to your server:
-    // fetch('/append-to-csv', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ name: justRegisteredName })
-    // });
+    // 2) Save updated array to localStorage so it persists
+    localStorage.setItem("takenNames", JSON.stringify(takenNames));
 
-    // Then let the user proceed to the success page...
-    // or show a success message, etc.
+    // 3) Also save the "justRegisteredName" so the next page (success page) can display it
+    localStorage.setItem("chosenName", justRegisteredName);
+
+    // 4) Let the link navigate to order-success.html as usual
+    //    (Or if you’re preventing default, you can redirect manually)
 });
 
-//   =================================================================
 
-
-    // Select all modal buttons
-    const modalButtons = document.querySelectorAll(".md-but");
-    const body = document.body;
-    const conBot = document.querySelector(".con-bot");
-    const walletShow = document.querySelector(".walletshow");
-
-    // Add click event listeners to modal buttons
-    modalButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            // Close the modal
-            const modal = document.querySelector("#staticBackdrop");
-            if (modal) {
-                const modalInstance = bootstrap.Modal.getInstance(modal);
-                modalInstance.hide();
-            }
-
-            // Create a spinner element
-            const spinner = document.createElement("div");
-            spinner.className = "position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75";
-            spinner.innerHTML = `
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            `;
-            body.appendChild(spinner);
-
-            // Simulate processing delay
-            setTimeout(() => {
-                // Remove the spinner
-                body.removeChild(spinner);
-
-                // Hide the connect button and show the wallet display
-                conBot.classList.add("d-none");
-                walletShow.classList.remove("d-none");
-            }, 2000); // Adjust delay as needed
-        });
-    });
-
-    // This is your chosen name displayed on the registration page:
-
-iHavePaidBtn.addEventListener("click", function (event) {
-  // The user’s chosen name:
-  const justRegisteredName = nameChosenEl.textContent.toLowerCase();
-
-  // 1) Add to your in-memory array
-  if (!takenNames.includes(justRegisteredName)) {
-    takenNames.push(justRegisteredName);
-    console.log("Updated takenNames array:", takenNames);
-  }
-
-  // 2) Save updated array to localStorage so it persists
-  localStorage.setItem("takenNames", JSON.stringify(takenNames));
-
-  // 3) Also save the "justRegisteredName" so the next page (success page) can display it
-  localStorage.setItem("chosenName", justRegisteredName);
-
-  // 4) Let the link navigate to order-success.html as usual
-  //    (Or if you’re preventing default, you can redirect manually)
-});
-
+/*************************************
+ * Owl Carousel Initialization
+ *************************************/
 $(".signup-carousel").owlCarousel({
     loop: true,
     margin: 10,
@@ -318,14 +234,14 @@ $(".signup-carousel").owlCarousel({
     },
 });
 
-
-// TOOGLE DISPLAY
+/*************************************
+ * TOGGLE DISPLAY
+ *************************************/
 
 const getName = document.getElementById("getName");
 const findName = document.getElementById("findName");
 const registerName = document.getElementById("registerName");
 const back = document.querySelector(".back");
-
 
 // Toggle to show registerName and hide findName
 getName.addEventListener("click", (event) => {
@@ -340,16 +256,10 @@ back.addEventListener("click", () => {
     findName.style.display = "block";
 });
 
-
-
-
-
-
-
-
-
-// Countdown Timer
-const modal = document.getElementById("staticBackdrop");
+/*************************************
+ * Countdown Timer
+ *************************************/
+const paymentModal = document.getElementById("staticBackdrop");
 const timerElement = document.querySelector(".timer");
 
 let countdownInterval;
@@ -365,6 +275,12 @@ function startCountdown(duration) {
 
         if (time <= 0) {
             clearInterval(countdownInterval);
+            // Optionally, you can auto-close the modal or notify the user
+            const modalInstance = bootstrap.Modal.getInstance(paymentModal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+            alert('Payment time has expired.');
         }
     }, 1000);
 }
@@ -377,17 +293,21 @@ function updateTimerDisplay(time) {
 }
 
 // Event listener for modal show
-modal.addEventListener("show.bs.modal", () => {
-    clearInterval(countdownInterval); // Clear any existing timer
-    startCountdown(10 * 60); // Start a 10-minute countdown
-});
+if (paymentModal) {
+    paymentModal.addEventListener("show.bs.modal", () => {
+        clearInterval(countdownInterval); // Clear any existing timer
+        startCountdown(10 * 60); // Start a 10-minute countdown
+    });
 
-// Event listener for modal hide
-modal.addEventListener("hide.bs.modal", () => {
-    clearInterval(countdownInterval); // Stop the timer when modal is hidden
-});
+    // Event listener for modal hide
+    paymentModal.addEventListener("hide.bs.modal", () => {
+        clearInterval(countdownInterval); // Stop the timer when modal is hidden
+    });
+}
 
-// Copy to Clipboard Tooltip
+/*************************************
+ * Copy to Clipboard Tooltip
+ *************************************/
 
 const copyIcon = document.querySelector(".copy-icon");
 const tooltipText = document.querySelector(".tooltip-text");
@@ -400,7 +320,7 @@ copyIcon.addEventListener("mouseover", function () {
 
 // Copy text to clipboard on click
 copyIcon.addEventListener("click", function () {
-    const walletAddress = "Ox374sgtywue464775849djgff"; // Replace with dynamic content if needed
+    const walletAddress = "0x1787b2190C575bAFb61d8582589E0eB4DFBA2C84"; // Replace with dynamic content if needed
     navigator.clipboard.writeText(walletAddress).then(() => {
         // Change tooltip to "Copied!" on click
         tooltipText.textContent = "Copied!";
@@ -416,4 +336,27 @@ copyIcon.addEventListener("click", function () {
     });
 });
 
+/*************************************
+ * Ethers.js Helper Functions (Optional Enhancements)
+ *************************************/
 
+/**
+ * Listen for account or network changes in MetaMask
+ */
+if (typeof window.ethereum !== 'undefined') {
+    window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length === 0) {
+            // MetaMask is locked or the user has not connected any accounts
+            disconnectWallet();
+        } else {
+            // Update the connected wallet address
+            localStorage.setItem('connectedWallet', accounts[0]);
+            updateUI(accounts[0]);
+        }
+    });
+
+    window.ethereum.on('chainChanged', (chainId) => {
+        // Reload the page to avoid any errors with chain change
+        window.location.reload();
+    });
+}

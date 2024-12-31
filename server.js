@@ -7,7 +7,7 @@ const sqlite3 = require('sqlite3').verbose();
 
 // Initialize Express App
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(bodyParser.json());

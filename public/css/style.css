@@ -116,7 +116,7 @@ body {
 
 .p-o {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .p-p {
@@ -332,8 +332,8 @@ body {
 }
 .search-box > img {
     position: absolute;
-    right: 34.9rem;
-    top: 24.1em;
+    right: 35rem;
+    top: 22.8em;
     margin: 10px 15px;
 }
 .search-input {
@@ -450,7 +450,7 @@ body {
     padding: 20px ;
   }
   .fs-8{
-    font-size: 10px;
+    font-size: 12px;
   }
   .cursor-pointer{
     cursor: pointer;
@@ -499,7 +499,16 @@ body {
 .simp{
     position: absolute;
     right: 7.5em;
-    top: 24.5em;
+    top: 23.2em;
     width: 2em;
     height: 2em;
+}
+.qrr{
+    width: 40%;
+    border: 2px solid #2563EB;
+    border-radius: 25px;
+}
+#txHash{
+    font-weight: 500;
+    font-size: 12px;
 }
