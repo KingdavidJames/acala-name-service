@@ -41,6 +41,7 @@ async function initializeEthers() {
     }
 }
 
+
 /**
  * Validate Ethereum Address
  * @param {string} address - Ethereum address to validate
@@ -194,6 +195,27 @@ async function connectWallet() {
     }
 }
 
+
+/**
+ * Listen for account or network changes in MetaMask
+ */
+if (typeof window.ethereum !== 'undefined') {
+    window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length === 0) {
+            // MetaMask is locked or the user has not connected any accounts
+            disconnectWallet();
+        } else {
+            // Update the connected wallet address
+            localStorage.setItem('connectedWallet', accounts[0]);
+            updateUI(accounts[0]);
+        }
+    });
+
+    window.ethereum.on('chainChanged', (chainId) => {
+        // Reload the page to avoid any errors with chain change
+        window.location.reload();
+    });
+}
 
 /**
  * Disconnect the wallet by clearing localStorage.
