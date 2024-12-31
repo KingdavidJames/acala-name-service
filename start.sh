@@ -1,1 +1,1 @@
-nameservice.py
+python3 nameservice.py
