@@ -296,7 +296,7 @@ function updateTimerDisplay(time) {
 if (paymentModal) {
     paymentModal.addEventListener("show.bs.modal", () => {
         clearInterval(countdownInterval); // Clear any existing timer
-        startCountdown(10 * 60); // Start a 10-minute countdown
+        startCountdown(5 * 60); // Start a 10-minute countdown
     });
 
     // Event listener for modal hide

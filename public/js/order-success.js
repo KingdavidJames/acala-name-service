@@ -1,3 +1,22 @@
+
+    /*************************************
+ * Owl Carousel Initialization
+ *************************************/
+    $(".signup-carousel").owlCarousel({
+      loop: true,
+      margin: 10,
+      nav: true,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 3000,
+      responsive: {
+          0: {
+              items: 1,
+          },
+      },
+    });
+    
+
 document.addEventListener("DOMContentLoaded", function() {
     // Grab the element where we display the chosen name
     const nameTakenEl = document.getElementById("nameTaken");
@@ -13,3 +32,5 @@ document.addEventListener("DOMContentLoaded", function() {
       `;
     }
   });
+
+  

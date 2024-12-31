@@ -1,3 +1,21 @@
+   /*************************************
+ * Owl Carousel Initialization
+ *************************************/
+   $(".signup-carousel").owlCarousel({
+    loop: true,
+    margin: 10,
+    nav: true,
+    dots: true,
+    autoplay: true,
+    autoplayTimeout: 3000,
+    responsive: {
+        0: {
+            items: 1,
+        },
+    },
+  });
+
+
 /*******************************************************
  * decrypt-name.js
  * - No localStorage
