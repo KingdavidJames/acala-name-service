@@ -129,11 +129,8 @@
         </div>
     </div>
 
-    <!-- Include Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const txHashEl = document.getElementById('txHash');
             const txTimeEl = document.getElementById('txTime');
             const payerAddressEl = document.getElementById('payerAddress');
@@ -141,37 +138,30 @@
             const payeeNameEl = document.getElementById('payeeName');
             const payeeAddressEl = document.getElementById('payeeAddress');
 
-            // Retrieve the transaction hash from query parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const transactionHash = urlParams.get('hash');
+            const txHash = localStorage.getItem('transactionHash');
+            const txTime = localStorage.getItem('transactionTime');
+            const payerAddress = localStorage.getItem('payerAddress');
+            const yearsPaid = localStorage.getItem('yearsPaid');
+            const payeeName = localStorage.getItem('payeeName');
+            const payeeAddress = localStorage.getItem('payeeAddress');
 
-            if (!transactionHash) {
-                alert('No transaction data found.');
-                return;
-            }
+            txHashEl.textContent = txHash ? txHash : 'N/A';
+            txTimeEl.textContent = txTime ? txTime : 'N/A';
+            payerAddressEl.textContent = payerAddress ? payerAddress : 'N/A';
+            yearsPaidEl.textContent = yearsPaid ? yearsPaid : 'N/A';
+            payeeNameEl.textContent = payeeName ? payeeName : 'N/A';
+            payeeAddressEl.textContent = payeeAddress ? payeeAddress : 'N/A';
 
-            try {
-                // Fetch transaction details from the backend
-                const response = await axios.get(`http://localhost:5000/api/transactions?hash=${transactionHash}`);
-                const transaction = response.data;
-
-                if (!transaction) {
-                    alert('Transaction not found.');
-                    return;
-                }
-
-                txHashEl.textContent = transaction.transactionHash || 'N/A';
-                txTimeEl.textContent = transaction.transactionTime || 'N/A';
-                payerAddressEl.textContent = transaction.payerAddress || 'N/A';
-                yearsPaidEl.textContent = transaction.yearsPaid || 'N/A';
-                payeeNameEl.textContent = transaction.payeeName || 'N/A';
-                payeeAddressEl.textContent = transaction.payeeAddress || 'N/A';
-            } catch (error) {
-                console.error('Error fetching transaction details:', error);
-                alert('Failed to retrieve transaction details.');
-            }
+            // Optionally, clear the transaction details after displaying
+            // localStorage.removeItem('transactionHash');
+            // localStorage.removeItem('transactionTime');
+            // localStorage.removeItem('payerAddress');
+            // localStorage.removeItem('yearsPaid');
+            // localStorage.removeItem('payeeName');
+            // localStorage.removeItem('payeeAddress');
         });
     </script>
+
 
     <script>
         // Display loader for 3 seconds, then show content
