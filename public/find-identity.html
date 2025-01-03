@@ -53,37 +53,47 @@
                         <h3 class="mt-3">Why Choose ANS</h3>
                         <p class="text-start mb-2"><span class="fw-medium">Simplified Wallets:</span> Replace unreadable
                             addresses with easy names.</p>
-                        <p class="text-start mb-2"><span class="fw-medium">Error-Free Transactions:</span> Avoid mistakes when sending crypto.</p>
-                        <p class="text-start mb-2"><span class="fw-medium">Secure and Immutable:</span> Powered by blockchain technology.</p>
-                        <p class="text-start mb-2"><span class="fw-medium">Universal Access:</span> Compatible across wallets and dApps.</p>
+                        <p class="text-start mb-2"><span class="fw-medium">Error-Free Transactions:</span> Avoid
+                            mistakes when sending crypto.</p>
+                        <p class="text-start mb-2"><span class="fw-medium">Secure and Immutable:</span> Powered by
+                            blockchain technology.</p>
+                        <p class="text-start mb-2"><span class="fw-medium">Universal Access:</span> Compatible across
+                            wallets and dApps.</p>
                     </div>
                     <div class="s-caro">
                         <div class="s-caro-img d-flex justify-content-start">
                             <img src="./assets/images/man-3.png" alt="">
                         </div>
                         <h3 class="mt-3">Personalized Username Search</h3>
-                        <p class="text-start">Quickly search for your desired username using the integrated search bar. The platform checks availability instantly, guiding you toward creating a unique blockchain identifier.</p>
+                        <p class="text-start">Quickly search for your desired username using the integrated search bar.
+                            The platform checks availability instantly, guiding you toward creating a unique blockchain
+                            identifier.</p>
                     </div>
                     <div class="s-caro">
                         <div class="s-caro-img d-flex justify-content-start">
                             <img src="./assets/images/man-4.png" alt="">
                         </div>
                         <h3 class="mt-3">Custom Registration Durations</h3>
-                        <p class="text-start">Choose how long you'd like to register your username, starting with a minimum of one year. This flexibility allows you to tailor your registration to suit your personal or professional needs.</p>
+                        <p class="text-start">Choose how long you'd like to register your username, starting with a
+                            minimum of one year. This flexibility allows you to tailor your registration to suit your
+                            personal or professional needs.</p>
                     </div>
                     <div class="s-caro">
                         <div class="s-caro-img d-flex justify-content-start">
                             <img src="./assets/images/man-5.png" alt="">
                         </div>
                         <h3 class="mt-3">Secure and Reliable Payment System</h3>
-                        <p class="text-start">Pay for your selected username with confidence through the platform's secure payment gateway. Transactions are processed efficiently, ensuring a hassle-free experience. </p>
+                        <p class="text-start">Pay for your selected username with confidence through the platform's
+                            secure payment gateway. Transactions are processed efficiently, ensuring a hassle-free
+                            experience. </p>
                     </div>
                     <div class="s-caro">
                         <div class="s-caro-img d-flex justify-content-start">
                             <img src="./assets/images/man-6.png" alt="">
                         </div>
                         <h3 class="mt-3">Availability Check in Real-Time</h3>
-                        <p class="text-start">Find out immediately if your preferred username is available or taken. If unavailable, try alternative names until you find the perfect match.</p>
+                        <p class="text-start">Find out immediately if your preferred username is available or taken. If
+                            unavailable, try alternative names until you find the perfect match.</p>
                     </div>
                 </div>
             </div>
@@ -185,8 +195,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-6 py-4">
-                    <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4" data-bs-toggle="modal" id="manualTransfer"
-                        data-bs-target="#staticBackdrop">
+                    <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4" data-bs-toggle="modal"
+                        id="manualTransfer" data-bs-target="#staticBackdrop">
                         <div class="me-2 ms-2">
                             <img src="./assets/icons/wallet.svg" alt="">
                         </div>
@@ -251,6 +261,32 @@
     </div>
 
 
+    <script>
+        /*************************************
+ * TOGGLE DISPLAY
+ *************************************/
+
+        const getName = document.getElementById("getName");
+        const findName = document.getElementById("findName");
+        const registerName = document.getElementById("registerName");
+        const back = document.querySelector(".back");
+        
+        registerName.style.display = "none";
+
+        // Toggle to show registerName and hide findName
+        getName.addEventListener("click", (event) => {
+            event.preventDefault(); // Prevent default anchor behavior
+            findName.style.display = "none";
+            registerName.style.display = "block";
+        });
+
+        // Toggle back to show findName and hide registerName
+        back.addEventListener("click", () => {
+            registerName.style.display = "none";
+            findName.style.display = "block";
+        });
+    </script>
+
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
@@ -267,8 +303,8 @@
 
     <!-- Your Custom Scripts -->
     <script src="./js/index.js" type="module"></script>
-    <script src="./js/find-identity.js" type="module"></script>`
-    <script src="./js/api.js" type="module"></script>`
+    <script src="./js/find-identity.js" type="module"></script>
+    <script src="./js/api.js" type="module"></script>
 
 </body>
 
