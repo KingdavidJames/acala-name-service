@@ -1,19 +1,21 @@
-   /*************************************
+
+import { getDecrypt } from "./api.js";
+/*************************************
  * Owl Carousel Initialization
  *************************************/
-   $(".signup-carousel").owlCarousel({
-    loop: true,
-    margin: 10,
-    nav: true,
-    dots: true,
-    autoplay: true,
-    autoplayTimeout: 3000,
-    responsive: {
-        0: {
-            items: 1,
-        },
+$(".signup-carousel").owlCarousel({
+  loop: true,
+  margin: 10,
+  nav: true,
+  dots: true,
+  autoplay: true,
+  autoplayTimeout: 3000,
+  responsive: {
+    0: {
+      items: 1,
     },
-  });
+  },
+});
 
 
 /*******************************************************
@@ -58,32 +60,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       decryptResult.textContent = "Checking name from server...";
-      const resp = await fetch(`http://localhost:3000/api/decrypt-name?name=${encodeURIComponent(nameToCheck)}`);
-      const data = await resp.json();
-      if (!data.exists) {
-        decryptResult.innerHTML = `
-          <p class="text-danger">
-            The name <strong>${nameToCheck}</strong> was not found in the registry.
-          </p>
-        `;
-      } else {
+      const response = await getDecrypt(nameToCheck);
+      console.log(response);
+      if (response.payeeName) {
         // found => show wallet, txn details
-        const dateString = new Date(data.createdAt).toLocaleString();
+        const dateString = new Date(response.transactionTime).toLocaleString();
         decryptResult.innerHTML = `
-          <h5>ANS Name: ${data.name}</h5>
-          <p><strong>Wallet Address:</strong> ${data.walletAddress}</p>
+          <h5>ANS Name: ${response.payeeName}</h5>
+          <p><strong>Wallet Address:</strong> ${response.payerAddress}</p>
           <p><strong>Tx Hash:</strong>
-            <a href="https://explorer.ambrosus-test.io/tx/${data.txnHash}" target="_blank">
-              ${data.txnHash}
+            <a href="https://explorer.ambrosus-test.io/tx/${response.transactionHash}" target="_blank">
+              ${response.transactionHash}
             </a>
           </p>
           <p><strong>Date of Registration:</strong> ${dateString}</p>
-          ${
-            data.yearCount
-              ? `<p><strong>Years Paid:</strong> ${data.yearCount}</p>`
-              : ""
+          ${response.yearsPaid
+            ? `<p><strong>Years Paid:</strong> ${response.yearsPaid}</p>`
+            : ""
           }
         `;
+      } else {
+        console.log(response);
+        decryptResult.innerHTML = `
+          <p class="text-danger"> ${response.message} in the ANS</p>
+        `;
+
+
       }
     } catch (err) {
       console.error(err);

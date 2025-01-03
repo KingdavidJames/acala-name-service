@@ -126,9 +126,10 @@ export async function getTransaction(hash) {
  * Fetches all registered names.
  * @returns {Promise<Array>} - An array of registered names.
  */
-export async function getRegisteredNames() {
+export async function getDecrypt(name) {
     try {
-        const response = await fetch(`${API_BASE_URL}/registered-names`, {
+        const params = new URLSearchParams({ name });
+        const response = await fetch(`${API_BASE_URL}/decrypt?${params.toString()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -137,8 +138,8 @@ export async function getRegisteredNames() {
 
         const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(data.message || 'Failed to fetch registered names.');
+        if (!response) {
+            throw new Error(data.message || `The name ${name} does not exist in the ANS registry.`);
         }
 
         return data;

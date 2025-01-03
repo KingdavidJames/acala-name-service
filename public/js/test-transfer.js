@@ -15,6 +15,25 @@
     },
   });
 
+  
+  async function initializeEthers() {
+    if (typeof window.ethereum !== 'undefined') {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+
+        try {
+            const network = await provider.getNetwork();
+            console.log('Connected Network:', network);
+            // Expected Output:
+            // Connected Network: { chainId: 22040, name: 'unknown' }
+        } catch (error) {
+            console.error('Error fetching network:', error);
+            alert('Failed to fetch network details. Please try again.');
+        }
+    } else {
+        alert('MetaMask is not installed. Please install MetaMask and try again.');
+    }
+}
 
 /******************************************************
  * ./js/test-transfer.js

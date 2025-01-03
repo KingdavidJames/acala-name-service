@@ -23,10 +23,10 @@ app.use(express.json());
 
 // Register a Name
 app.post('/api/register-name', async (req, res) => {
-    const { name, walletAddress, yearsPaid, amount} = req.body;
+    const { name, walletAddress, yearsPaid, amount } = req.body;
     // const name = 'hamza';
     // const walletAddress = '0x1234567890123456789012345678901234567890';
-    
+
     // Input validation
     if (!name || !walletAddress) {
         return res.status(400).json({ message: 'Name and wallet address are required.' });
@@ -108,7 +108,7 @@ app.post('/api/transactions', async (req, res) => {
             payeeAddress: payeeAddress.toLowerCase(),
             amount,
         });
-        
+
         await newTransaction.save();
         res.status(201).json({ message: 'Transaction saved successfully.', transactionId: newTransaction._id });
     } catch (error) {
@@ -138,10 +138,18 @@ app.get('/api/transactions', async (req, res) => {
 });
 
 // Get Registered Names
-app.get('/api/registered-names', async (req, res) => {
+app.get('/api/decrypt', async (req, res) => {
+    const { name } = req.query;
     try {
-        const names = await RegisteredName.find();
-        res.status(200).json(names);
+        const user = await Transaction.findOne({ payeeName: name });
+        if (user) {
+            console.log(user);
+            res.status(200).json(user);
+        }
+        else {
+            console.log('User not found');
+            res.status(404).json({ message: `${name} does not exist in the ANS registry` });
+        }
     } catch (error) {
         console.error('Error fetching registered names:', error);
         res.status(500).json({ message: 'Server error while fetching registered names.' });
