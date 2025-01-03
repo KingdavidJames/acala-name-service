@@ -129,14 +129,18 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    <script type="module">
+        import { registerName, saveTransaction } from './js/api.js';
+        document.addEventListener('DOMContentLoaded', async() => {
+
             const txHashEl = document.getElementById('txHash');
             const txTimeEl = document.getElementById('txTime');
             const payerAddressEl = document.getElementById('payerAddress');
             const yearsPaidEl = document.getElementById('yearsPaid');
             const payeeNameEl = document.getElementById('payeeName');
             const payeeAddressEl = document.getElementById('payeeAddress');
+            
+
 
             const txHash = localStorage.getItem('transactionHash');
             const txTime = localStorage.getItem('transactionTime');
@@ -144,13 +148,8 @@
             const yearsPaid = localStorage.getItem('yearsPaid');
             const payeeName = localStorage.getItem('payeeName');
             const payeeAddress = localStorage.getItem('payeeAddress');
-
-            txHashEl.textContent = txHash ? txHash : 'N/A';
-            txTimeEl.textContent = txTime ? txTime : 'N/A';
-            payerAddressEl.textContent = payerAddress ? payerAddress : 'N/A';
-            yearsPaidEl.textContent = yearsPaid ? yearsPaid : 'N/A';
-            payeeNameEl.textContent = payeeName ? payeeName : 'N/A';
-            payeeAddressEl.textContent = payeeAddress ? payeeAddress : 'N/A';
+            const txAmount = localStorage.getItem('amount');
+            console.log('txAmount', txAmount);
 
             // Optionally, clear the transaction details after displaying
             // localStorage.removeItem('transactionHash');
@@ -159,6 +158,36 @@
             // localStorage.removeItem('yearsPaid');
             // localStorage.removeItem('payeeName');
             // localStorage.removeItem('payeeAddress');
+
+            const transactionData = {
+                transactionHash: txHash,
+                transactionTime: txTime,
+                payerAddress: payerAddress,
+                yearsPaid: yearsPaid,
+                payeeName: payeeName,
+                payeeAddress: payeeAddress,
+                amount: txAmount
+                
+            }
+            try {
+            // const registerName = await registerName(nameChosenEl.textContent.toLowerCase(), payerAddress);
+            const save = await saveTransaction(transactionData);
+            // const register = await registerName(payeeName, payerAddress, save.transactionId);
+        
+            console.log('Transaction saved:', save);
+            // console.log('Name registered:', register);
+            
+        } catch (error) {
+            console.error('Error saving transaction:', error);
+            
+        }
+
+            txHashEl.textContent = txHash;
+            txTimeEl.textContent = txTime;
+            payerAddressEl.textContent = payerAddress;
+            yearsPaidEl.textContent = yearsPaid;
+            payeeNameEl.textContent = payeeName;
+            payeeAddressEl.textContent = payeeAddress;
         });
     </script>
 
@@ -179,10 +208,11 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
-    <script src="./js/index.js"></script>
-    <script src="./js/order-success.js"></script>
-    <script src="./js/script.js"></script>
+        crossorigin="http://localhost:5000"></script>
+
+    <script src="./js/index.js" type="module"></script>
+    <script src="./js/order-success.js" type="module"></script>
+    <script src="./js/script.js" type="module"></script>
 </body>
 
 </html>

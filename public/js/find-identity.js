@@ -1,7 +1,7 @@
 /*************************************
  * Simulated CSV Data (in-memory)
  *************************************/
-
+import { checkName } from "./api.js";
 // Merge localStorage 'takenNames' with our default array
 const storedTakenNames = JSON.parse(localStorage.getItem("takenNames")) || [];
 let takenNames = [
@@ -16,6 +16,8 @@ const availableDiv = document.getElementById("availableName");
 const unavailableDiv = document.getElementById("unAvailableName");
 const getNameLink = document.getElementById("getName");
 
+
+
 // Spinner Element
 let spinner = null;
 
@@ -23,7 +25,7 @@ let spinner = null;
 const registerNameDiv = document.getElementById("registerName");
 const findNameDiv = document.getElementById("findName");
 const nameChosenEl = document.getElementById("nameChosen");
-
+ 
 /*************************************
  * Hide the available/unavailable name
  * divs initially
@@ -45,7 +47,7 @@ searchInput.parentNode.appendChild(spinner);
 /*************************************
  * Searching for a name
  *************************************/
-searchInput.addEventListener("keydown", function (e) {
+searchInput.addEventListener("keydown", async function (e) {
     // If user presses Enter:
     if (e.key === "Enter") {
         e.preventDefault(); // Prevent form submission or page refresh
@@ -63,7 +65,7 @@ searchInput.addEventListener("keydown", function (e) {
         }
 
         // Simulate a short delay for searching
-        setTimeout(() => {
+        setTimeout(async() => {
             spinner.style.display = "none";
 
             // Check if name is in 'takenNames'
@@ -72,7 +74,11 @@ searchInput.addEventListener("keydown", function (e) {
                 ? nameToCheck.toLowerCase()
                 : nameToCheck.toLowerCase() + ".amb";
 
-            if (takenNames.includes(formattedName)) {
+            // Call the API to check if the name is taken
+            try {
+            const response = await checkName(formattedName);
+            console.log(response);
+            if (response.taken) {
                 // Unavailable
                 availableDiv.style.display = "none";
                 unavailableDiv.style.display = "flex";
@@ -89,6 +95,13 @@ searchInput.addEventListener("keydown", function (e) {
                 availableDiv.querySelector("p").innerHTML =
                     `${formattedName} is <span class="text-green fw-medium">Available</span>`;
             }
+            
+        } catch (error) {
+            console.error("Error checking name:", error);
+            alert("An error occurred while checking the name. Please try again.");
+            
+        }
+            
         }, 1000); // 1 second search delay
     }
 });
@@ -138,8 +151,8 @@ const pYearEls = document.querySelectorAll(".p-year");
 const modalTotalAMBEl = document.getElementById("modalTotalAMB");
 
 let yearCount = 1;
-let basePrice = 8;      // 8 AMB per year
-let networkFee = 2;     // 2 AMB per year
+let basePrice = 2;      // 8 AMB per year
+let networkFee = 1;     // 2 AMB per year
 
 function setYearCount(value) {
     yearCount = value;
@@ -162,6 +175,8 @@ function setYearCount(value) {
     pYearEls[3].textContent = `${totalNetworkFee} AMB`;
     pYearEls[4].textContent = `Total`;
     pYearEls[5].textContent = `${total} AMB`;
+
+
 
     // Update the modal’s total <span>
     if (modalTotalAMBEl) {

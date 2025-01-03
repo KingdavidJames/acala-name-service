@@ -2,9 +2,14 @@
 /*************************************
  * MetaMask Payment Functionality
  *************************************/
-
 // Select the MetaMask payment option
 const metamaskPaymentButton = document.getElementById('metamask');
+
+const modalTotalAMBEl = document.getElementById('modalTotalAMB');
+
+const yearDisplay = document.getElementById("yearDisplay");
+const nameChosenEl = document.getElementById("nameChosen");
+const yearDetails = document.querySelector(".year-details span");
 
 // AMB Token Contract Details
 // Recipient wallet address (Payee)
@@ -112,10 +117,11 @@ async function transferAMB(amount) {
         localStorage.setItem('transactionHash', transactionHash);
         localStorage.setItem('transactionTime', date.toLocaleString());
         localStorage.setItem('payerAddress', payerAddress);
-        localStorage.setItem('yearsPaid', yearCount.toString());
+        localStorage.setItem('yearsPaid', yearDetails.textContent.toString());
         localStorage.setItem('payeeName', nameChosenEl.textContent.toLowerCase());
         localStorage.setItem('payeeAddress', RECIPIENT_ADDRESS);
 
+        
         // Redirect to order-success.html
         window.location.href = 'order-success.html';
     } catch (error) {
@@ -308,6 +314,7 @@ async function handleMetaMaskPayment() {
         // Convert AMB to Wei (assuming AMB has 18 decimals)
         const amountInWei = ethers.utils.parseUnits(totalAMB.toString(), 18);
 
+        localStorage.setItem('amount', totalAMB);
         // Confirm with the user before initiating the transfer
         const userConfirmed = confirm(`Do you want to send ${totalAMB} AMB to the recipient?`);
         if (!userConfirmed) {
@@ -338,16 +345,16 @@ async function handleMetaMaskPayment() {
         const date = new Date(timestamp * 1000); // Convert UNIX timestamp to JS Date
 
         // Get the number of years the user paid for
-        const yearsPaid = yearCount; // Assuming `yearCount` is defined globally
+        // const yearsPaid = yearCount; // Assuming `yearCount` is defined globally
 
         // Save transaction details to localStorage for the success page
         localStorage.setItem('transactionHash', transactionHash);
         localStorage.setItem('transactionTime', date.toLocaleString());
         localStorage.setItem('payerAddress', payerAddress);
-        localStorage.setItem('yearsPaid', yearsPaid.toString());
+        localStorage.setItem('yearsPaid', yearDetails.textContent.toString());
         localStorage.setItem('payeeName', nameChosenEl.textContent.toLowerCase());
         localStorage.setItem('payeeAddress', RECIPIENT_ADDRESS);
-
+        
         // Redirect to order-success.html
         window.location.href = 'order-success.html';
     } catch (error) {
