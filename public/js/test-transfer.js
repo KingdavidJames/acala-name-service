@@ -15,7 +15,95 @@
     },
   });
 
-  
+  /*************************************
+ * MetaMask Connection for Test Transfer Page
+ *************************************/
+// Wallet connection state
+let connectedWalletAddress = localStorage.getItem("connectedWalletAddress") || null;
+
+// HTML Elements
+const connectWalletButton = document.getElementById("connectWalletButton");
+const transferCurrentAddress = document.getElementById("transferCurrentAddress");
+
+/**
+ * Update the UI based on the wallet connection state.
+ */
+function updateUI(walletAddress) {
+    const walletAddresses = document.querySelectorAll('.wallet-address');
+    const transferCurrentAddress = document.getElementById("transferCurrentAddress");
+    if (walletAddress) {
+        connectWalletButton.textContent = "Disconnect Wallet";
+        connectWalletButton.onclick = disconnectWallet;
+       // Update all wallet address elements
+       walletAddresses.forEach(addr => {
+        addr.textContent = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+    });
+    } else {
+        connectWalletButton.textContent = "Connect Wallet";
+        connectWalletButton.onclick = connectWallet;
+        // Hide all wallet displays
+        walletDisplays.forEach(display => display.classList.add('d-none'));
+
+        // Clear all wallet address elements
+        walletAddresses.forEach(addr => {
+            addr.textContent = '';
+        });
+    }
+}
+
+/**
+ * Connect to MetaMask and initialize the wallet connection.
+ */
+async function connectWallet() {
+    if (typeof window.ethereum === "undefined") {
+        alert("MetaMask is not installed. Please install MetaMask and try again.");
+        return;
+    }
+
+    try {
+        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+        connectedWalletAddress = accounts[0];
+        localStorage.setItem("connectedWalletAddress", connectedWalletAddress);
+        updateUI(connectedWalletAddress);
+    } catch (error) {
+        console.error("Error connecting wallet:", error);
+        alert("Failed to connect wallet. Please try again.");
+    }
+}
+
+/**
+ * Disconnect the wallet by clearing the state.
+ */
+function disconnectWallet() {
+    connectedWalletAddress = null;
+    localStorage.removeItem("connectedWalletAddress");
+    updateUI(null);
+}
+
+/**
+ * Initialize the connection state on page load.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+    updateUI(connectedWalletAddress);
+});
+
+// Listen for wallet or network changes
+if (typeof window.ethereum !== "undefined") {
+    ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length === 0) {
+            disconnectWallet();
+        } else {
+            connectedWalletAddress = accounts[0];
+            localStorage.setItem("connectedWalletAddress", connectedWalletAddress);
+            updateUI(connectedWalletAddress);
+        }
+    });
+
+    ethereum.on("chainChanged", () => {
+        window.location.reload();
+    });
+}
+
   async function initializeEthers() {
     if (typeof window.ethereum !== 'undefined') {
         provider = new ethers.providers.Web3Provider(window.ethereum);

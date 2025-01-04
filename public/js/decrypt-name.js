@@ -1,5 +1,5 @@
-
 import { getDecrypt } from "./api.js";
+
 /*************************************
  * Owl Carousel Initialization
  *************************************/
@@ -17,7 +17,6 @@ $(".signup-carousel").owlCarousel({
   },
 });
 
-
 /*******************************************************
  * decrypt-name.js
  * - No localStorage
@@ -28,27 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const decryptInput = document.getElementById("decryptInput");
   const decryptButton = document.getElementById("decryptButton");
   const decryptResult = document.getElementById("decryptResult");
-  const decryptCurrentAddress = document.getElementById("decryptCurrentAddress");
-
-  let userAddress = null;
-
-  // 1) Check if user is connected
-  if (typeof window.ethereum !== "undefined") {
-    try {
-      const accounts = await window.ethereum.request({ method: "eth_accounts" });
-      if (accounts && accounts.length > 0) {
-        userAddress = accounts[0];
-        decryptCurrentAddress.textContent = userAddress;
-      } else {
-        decryptCurrentAddress.textContent = "Not Connected";
-      }
-    } catch (err) {
-      console.error(err);
-      decryptCurrentAddress.textContent = "Error checking wallet";
-    }
-  } else {
-    decryptCurrentAddress.textContent = "No MetaMask found";
-  }
 
   // 2) On "Decrypt"
   decryptButton.addEventListener("click", async () => {
@@ -69,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <h5>ANS Name: ${response.payeeName}</h5>
           <p><strong>Wallet Address:</strong> ${response.payerAddress}</p>
           <p><strong>Tx Hash:</strong>
-            <a href="https://explorer.ambrosus-test.io/tx/${response.transactionHash}" target="_blank">
+            <a href="https://testnet.airdao.io/explorer/tx/${response.transactionHash}" target="_blank">
               ${response.transactionHash}
             </a>
           </p>
@@ -84,8 +62,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         decryptResult.innerHTML = `
           <p class="text-danger"> ${response.message} in the ANS</p>
         `;
-
-
       }
     } catch (err) {
       console.error(err);
