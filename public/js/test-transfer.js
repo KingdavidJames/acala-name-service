@@ -210,13 +210,15 @@ metamaskButton.addEventListener("click", async () => {
     try {
         // 1) Convert AMB to Wei
         const amountInWei = ethers.utils.parseUnits(transferAmount.toString(), 18);
-
+        const amountInEther = ethers.utils.formatEther(amountInWei);
+        console.log("Amount in Wei:", amountInWei.toString());
+        console.log("Amount in Ether:", amountInEther);
         // 2) Send transaction
         const tx = await signer.sendTransaction({
             to: finalRecipientAddress,
             value: amountInWei,
         });
-        const userConfirmed = confirm(`Do you want to send ${amountInWei} AMB to the recipient?`);
+        const userConfirmed = confirm(`Do you want to send ${amountInEther} AMB to the recipient?`);
         if (!userConfirmed) {
             return;
         }
