@@ -1,7 +1,9 @@
-   /*************************************
+import { getDecrypt } from "./api.js";
+
+/*************************************
  * Owl Carousel Initialization
  *************************************/
-   $(".signup-carousel").owlCarousel({
+$(".signup-carousel").owlCarousel({
     loop: true,
     margin: 10,
     nav: true,
@@ -13,46 +15,73 @@
             items: 1,
         },
     },
-  });
+});
 
-  /*************************************
- * MetaMask Connection for Test Transfer Page
+/*************************************
+ * Global Variables
  *************************************/
-// Wallet connection state
-let connectedWalletAddress = localStorage.getItem("connectedWalletAddress") || null;
+let connectedWalletAddress = localStorage.getItem("connectedWallet") || null;
+let finalRecipientAddress = "";     // Actual 0x address to transfer to (after .amb check)
+let originalRecipientInput = "";    // Used to track .amb name if user typed that
+let transferAmount = 0;            // AMB amount
+let provider, signer;
 
-// HTML Elements
-const connectWalletButton = document.getElementById("connectWalletButton");
-const transferCurrentAddress = document.getElementById("transferCurrentAddress");
+/*************************************
+ * HTML Elements
+ *************************************/
+const transferButton = document.getElementById("transferButton");
+const recipientInput = document.getElementById("recipientInput");
+const amountInput = document.getElementById("amountInput");
+const transferStatus = document.getElementById("transferStatus");
 
-/**
- * Update the UI based on the wallet connection state.
- */
+// Payment Method Modal and its triggers
+const paymentMethodModalEl = document.getElementById("staticBackdrop2");
+let paymentMethodModal = null;
+
+// Manual Transfer Modal
+const manualTransferModalEl = document.getElementById("staticBackdrop");
+let manualTransferModal = null;
+
+// Payment Method Options
+const manualTransferButton = document.getElementById("manualTransfer");
+const metamaskButton = document.getElementById("metamask");
+
+// Connect/Disconnect Buttons (similar to find-identity flow)
+const connectButton = document.querySelector(".con-bot");
+const walletShows = document.querySelectorAll(".walletshow");
+const walletAddresses = document.querySelectorAll(".wallet-address");
+
+/*************************************
+ * Connect/Disconnect UI Logic
+ *************************************/
 function updateUI(walletAddress) {
-    const walletAddresses = document.querySelectorAll('.wallet-address');
-    const transferCurrentAddress = document.getElementById("transferCurrentAddress");
     if (walletAddress) {
-        connectWalletButton.textContent = "Disconnect Wallet";
-        connectWalletButton.onclick = disconnectWallet;
-       // Update all wallet address elements
-       walletAddresses.forEach(addr => {
-        addr.textContent = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
-    });
-    } else {
-        connectWalletButton.textContent = "Connect Wallet";
-        connectWalletButton.onclick = connectWallet;
-        // Hide all wallet displays
-        walletDisplays.forEach(display => display.classList.add('d-none'));
+        connectButton.textContent = "Disconnect";
+        connectButton.onclick = disconnectWallet;
 
-        // Clear all wallet address elements
+        // Show the wallet display
+        walletShows.forEach(show => show.classList.remove("d-none"));
+
+        // Update the wallet addresses
         walletAddresses.forEach(addr => {
-            addr.textContent = '';
+            addr.textContent = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+        });
+    } else {
+        connectButton.textContent = "Connect Wallet";
+        connectButton.onclick = connectWallet;
+
+        // Hide the wallet displays
+        walletShows.forEach(show => show.classList.add("d-none"));
+
+        // Clear wallet address text
+        walletAddresses.forEach(addr => {
+            addr.textContent = "";
         });
     }
 }
 
 /**
- * Connect to MetaMask and initialize the wallet connection.
+ * Connect to MetaMask and initialize Ethers
  */
 async function connectWallet() {
     if (typeof window.ethereum === "undefined") {
@@ -63,7 +92,7 @@ async function connectWallet() {
     try {
         const accounts = await ethereum.request({ method: "eth_requestAccounts" });
         connectedWalletAddress = accounts[0];
-        localStorage.setItem("connectedWalletAddress", connectedWalletAddress);
+        localStorage.setItem("connectedWallet", connectedWalletAddress);
         updateUI(connectedWalletAddress);
     } catch (error) {
         console.error("Error connecting wallet:", error);
@@ -72,18 +101,159 @@ async function connectWallet() {
 }
 
 /**
- * Disconnect the wallet by clearing the state.
+ * Disconnect Wallet
  */
 function disconnectWallet() {
     connectedWalletAddress = null;
-    localStorage.removeItem("connectedWalletAddress");
+    localStorage.removeItem("connectedWallet");
     updateUI(null);
 }
 
 /**
- * Initialize the connection state on page load.
+ * Initialize Ethers
  */
-document.addEventListener("DOMContentLoaded", function () {
+async function initializeEthers() {
+    if (typeof window.ethereum !== 'undefined') {
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        signer = provider.getSigner();
+    } else {
+        alert('MetaMask is not installed. Please install MetaMask and try again.');
+    }
+}
+
+/*************************************
+ * Transfer Flow
+ *************************************/
+transferButton.addEventListener("click", async () => {
+    transferStatus.textContent = ""; // Clear status
+
+    // 1) Get recipient and amount
+    originalRecipientInput = recipientInput.value.trim().toLowerCase();
+    const amountString = amountInput.value.trim();
+    transferAmount = parseFloat(amountString);
+
+    // 2) Validate amount
+    if (isNaN(transferAmount) || transferAmount <= 0) {
+        alert("Invalid amount. Must be a positive number.");
+        return;
+    }
+
+    // 3) Determine if input is .amb or 0x address
+    if (originalRecipientInput.endsWith(".amb")) {
+        // .amb name => check DB
+        try {
+            const result = await getDecrypt(originalRecipientInput);
+            // If success, result should contain the walletAddress from DB
+            if (result.payeeName && result.payerAddress) {
+                finalRecipientAddress = result.payerAddress;
+            } else {
+                // If for some reason the user object doesn't have a walletAddress
+                alert(`The name "${originalRecipientInput}" does not exist in the ANS registry.`);
+                return;
+            }
+        } catch (error) {
+            // 404 or any server error
+            alert(`The name "${originalRecipientInput}" does not exist in the ANS registry.`);
+            console.error(error);
+            return;
+        }
+    } else {
+        // Must be a 0x address
+        if (!/^0x[a-fA-F0-9]{40}$/.test(originalRecipientInput)) {
+            alert("Invalid recipient format. Must be a .amb name or a valid Ethereum address.");
+            return;
+        }
+        finalRecipientAddress = originalRecipientInput;
+    }
+
+    // 4) If valid, load Payment Method Modal
+    paymentMethodModal = new bootstrap.Modal(paymentMethodModalEl, { keyboard: false });
+    paymentMethodModal.show();
+});
+
+/*************************************
+ * Payment Method Options
+ *************************************/
+
+//  -- Manual Transfer
+manualTransferButton.addEventListener("click", () => {
+    // Hide Payment Method Modal
+    paymentMethodModal?.hide();
+
+    // Show the manual transfer modal
+    manualTransferModal = new bootstrap.Modal(manualTransferModalEl, { keyboard: false });
+    manualTransferModal.show();
+
+    // Update the manual transfer modal details
+    document.getElementById("amountSend").textContent = transferAmount.toString();
+    // If you want to change the "Wallet Address" in the modal, do so as well
+    // E.g., if there's an element for the payee wallet or name, update it here.
+});
+
+//  -- MetaMask Transfer
+metamaskButton.addEventListener("click", async () => {
+    paymentMethodModal?.hide(); // Hide Payment Method Modal
+
+    // Check if wallet is connected
+    if (!connectedWalletAddress) {
+        alert("Please connect your wallet first.");
+        return;
+    }
+
+    // Initialize Ethers
+    await initializeEthers();
+    if (!provider || !signer) {
+        alert("Unable to initialize Ethers.js. Please ensure MetaMask is connected.");
+        return;
+    }
+
+    try {
+        // 1) Convert AMB to Wei
+        const amountInWei = ethers.utils.parseUnits(transferAmount.toString(), 18);
+
+        // 2) Send transaction
+        const tx = await signer.sendTransaction({
+            to: finalRecipientAddress,
+            value: amountInWei,
+        });
+        const userConfirmed = confirm(`Do you want to send ${amountInWei} AMB to the recipient?`);
+        if (!userConfirmed) {
+            return;
+        }
+
+        console.log("Transaction sent:", tx.hash);
+        transferStatus.textContent = "Waiting for transaction confirmation...";
+
+        // 3) Wait for confirmation
+        const receipt = await provider.waitForTransaction(tx.hash);
+        console.log("Transaction confirmed:", receipt.transactionHash);
+
+        // 4) Display success info
+        const date = new Date().toLocaleString();
+        const usedRecipient = originalRecipientInput.endsWith(".amb")
+            ? originalRecipientInput // show .amb if user typed that
+            : finalRecipientAddress; // otherwise show the 0x address
+
+        transferStatus.innerHTML = `
+      <div class="text-success mt-3">
+        <p><strong>Transaction Successful!</strong></p>
+        <p>Transaction Hash: <span>${receipt.transactionHash}</span></p>
+        <p>Amount: <span>${transferAmount} AMB</span></p>
+        <p>Recipient: <span>${usedRecipient}</span></p>
+        <p>Time: <span>${date}</span></p>
+      </div>
+    `;
+    } catch (error) {
+        console.error("Error during MetaMask transfer:", error);
+        alert("Transaction failed or was rejected. Check console for details.");
+    }
+});
+
+/*************************************
+ * On Page Load
+ *************************************/
+document.addEventListener("DOMContentLoaded", () => {
+    // Initialize the connection UI
     updateUI(connectedWalletAddress);
 });
 
@@ -94,7 +264,7 @@ if (typeof window.ethereum !== "undefined") {
             disconnectWallet();
         } else {
             connectedWalletAddress = accounts[0];
-            localStorage.setItem("connectedWalletAddress", connectedWalletAddress);
+            localStorage.setItem("connectedWallet", connectedWalletAddress);
             updateUI(connectedWalletAddress);
         }
     });
@@ -103,163 +273,3 @@ if (typeof window.ethereum !== "undefined") {
         window.location.reload();
     });
 }
-
-  async function initializeEthers() {
-    if (typeof window.ethereum !== 'undefined') {
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        signer = provider.getSigner();
-
-        try {
-            const network = await provider.getNetwork();
-            console.log('Connected Network:', network);
-            // Expected Output:
-            // Connected Network: { chainId: 22040, name: 'unknown' }
-        } catch (error) {
-            console.error('Error fetching network:', error);
-            alert('Failed to fetch network details. Please try again.');
-        }
-    } else {
-        alert('MetaMask is not installed. Please install MetaMask and try again.');
-    }
-}
-
-/******************************************************
- * ./js/test-transfer.js
- ******************************************************/
-
-document.addEventListener("DOMContentLoaded", function () {
-  // HTML Elements
-  const transferForm = document.getElementById("transferForm");
-  const recipientInput = document.getElementById("recipient");
-  const amountInput = document.getElementById("amount");
-  const transferResultDiv = document.getElementById("transferResult");
-  const transferFromEl = document.getElementById("transferFrom");
-  const transferToEl = document.getElementById("transferTo");
-  const transferAmountEl = document.getElementById("transferAmount");
-  const transferTxHashEl = document.getElementById("transferTxHash");
-  const transferDateEl = document.getElementById("transferDate");
-
-  // Spinner (Optional)
-  let transferSpinner = document.createElement("div");
-  transferSpinner.className = "spinner-border spinner-border-sm text-primary ms-2 simp";
-  transferSpinner.style.display = "none";
-  transferForm.appendChild(transferSpinner);
-
-  // Handle Transfer Form Submission
-  transferForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      transferSpinner.style.display = "inline-block";
-
-      const recipient = recipientInput.value.trim().toLowerCase();
-      const amount = parseFloat(amountInput.value.trim());
-
-      // Validate Inputs
-      if (!recipient.endsWith(".amb") && !/^0x[a-fA-F0-9]{40}$/.test(recipient)) {
-          transferSpinner.style.display = "none";
-          alert("Invalid recipient format. Must be a .amb name or a valid Ethereum address.");
-          return;
-      }
-
-      if (isNaN(amount) || amount <= 0) {
-          transferSpinner.style.display = "none";
-          alert("Invalid amount. Must be a positive number.");
-          return;
-      }
-
-      // Check if wallet is connected
-      const connectedWalletAddress = window.connectedWalletAddress || localStorage.getItem("connectedWalletAddress");
-      if (!connectedWalletAddress) {
-          transferSpinner.style.display = "none";
-          alert("Please connect your wallet first.");
-          return;
-      }
-
-      // Determine recipient address
-      let recipientAddress = recipient;
-      if (recipient.endsWith(".amb")) {
-          // Fetch the mapped wallet address from the backend
-          try {
-              const decryptResponse = await fetch(`/api/decrypt-name?name=${encodeURIComponent(recipient)}`, {
-                  method: "GET",
-                  headers: { "Content-Type": "application/json" },
-              });
-
-              const decryptData = await decryptResponse.json();
-
-              if (decryptResponse.ok && decryptData.exists) {
-                  recipientAddress = decryptData.walletAddress;
-              } else {
-                  transferSpinner.style.display = "none";
-                  alert("The .amb name is not registered.");
-                  return;
-              }
-          } catch (error) {
-              transferSpinner.style.display = "none";
-              console.error(error);
-              alert("Error fetching recipient address. Please try again.");
-              return;
-          }
-      }
-
-      try {
-          // Calculate AMB to send
-          const amountWei = web3.utils.toWei(amount.toString(), "ether");
-
-          // Initiate Transaction
-          const txHash = await window.ethereum.request({
-              method: "eth_sendTransaction",
-              params: [{
-                  from: connectedWalletAddress,
-                  to: recipientAddress,
-                  value: "0x" + BigInt(amountWei).toString(16),
-              }]
-          });
-
-          // Display Transfer Details
-          transferFromEl.textContent = connectedWalletAddress;
-          transferToEl.textContent = recipientAddress;
-          transferAmountEl.textContent = `${amount} AMB`;
-          transferTxHashEl.textContent = shortenAddress(txHash);
-          transferTxHashEl.href = `https://explorer.ambrosus-test.io/tx/${txHash}`;
-          transferDateEl.textContent = new Date().toLocaleString();
-
-          transferResultDiv.classList.remove("d-none");
-
-          // Optionally, you can log the transfer to the backend
-          const logResponse = await fetch(`/api/log-transfer`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                  sender: connectedWalletAddress,
-                  recipient: recipientAddress,
-                  amountAMB: amount,
-                  txnHash: txHash
-              })
-          });
-
-          const logData = await logResponse.json();
-
-          if (!logResponse.ok) {
-              console.error(logData.error);
-              // Optionally, notify the user
-          }
-
-          transferSpinner.style.display = "none";
-          alert("Transfer successful!");
-
-          // Reset the form
-          transferForm.reset();
-      } catch (error) {
-          transferSpinner.style.display = "none";
-          console.error(error);
-          alert("Transaction failed or was rejected.");
-      }
-  });
-
-  // Function to shorten transaction hash for display
-  function shortenAddress(addr) {
-      if (!addr) return "0x... (Invalid)";
-      return addr.slice(0, 6) + "..." + addr.slice(-4);
-  }
-
-});

@@ -93,10 +93,10 @@
         <ul class="me-auto d-flex justify-content-end">
           <a href="#" class="con-bot text-decoration-none">Connect Wallet</a>
           <div class="d-flex walletshow align-items-center d-none justify-content-center ms-3">
-              <img src="./assets/images/wallet-icon.png" alt="">
-              <div class="mb-0 fw-light ms-1 wallet-address"></div>
+            <img src="./assets/images/wallet-icon.png" alt="">
+            <div class="mb-0 fw-light ms-1 wallet-address"></div>
           </div>
-      </ul>
+        </ul>
         <div class="mt-5 d-flex flex-column align-items-center">
           <h2 class="mb-4">Test ANS Transfer</h2>
           <input id="recipientInput" class="search-input w-50 mb-3" type="text"
@@ -111,6 +111,85 @@
       </div>
     </div>
   </div>
+  <!-- Select Payment Method Modal -->
+
+  <div class="modal fade" id="staticBackdrop2" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h1 class="modal-title fs-5 p-o ms-3" id="staticBackdropLabel">Select Payment Method</h1>
+            <p class="coin-details mb-0 ms-3 fs-6">Wallet Type</p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-6 py-4">
+          <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4" data-bs-toggle="modal" id="manualTransfer"
+            data-bs-target="#staticBackdrop">
+            <div class="me-2 ms-2">
+              <img src="./assets/icons/wallet.svg" alt="">
+            </div>
+            <div class="">
+              <p class="coin-header fs-6 text-black mb-0">Manual Transfer</p>
+            </div>
+          </div>
+          <div class="amb md-but d-flex align-items-center px-2 py-2 mb-4" id="metamask">
+            <div class="me-2 ms-2">
+              <img src="./assets/icons/metamask.svg" alt="">
+            </div>
+            <div class="">
+              <p class="coin-header fs-6 text-black mb-0">MetaMask</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wallet Transfer Modal -->
+
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img src="./assets/icons/amb.svg" class="ms-3" alt="">
+          <h1 class="modal-title fs-5 coin-header ms-3" id="staticBackdropLabel">AMB</h1>
+          <p class="coin-details mb-0 ms-2">Amber</p>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="coin-details text-center ms-2 mb-1">
+            Send <span class="text-black" id="amountSend">102</span>
+            <span class="text-black">AMB</span> to:
+          </p>
+          <p class="p-p ac-color mb-0 text-center fs-5">Wallet Address</p>
+          <p class="p-o mb-1 text-center">
+            0x1787b2190C575bAFb61d8582589E0eB4DFBA2C84
+            <i class="bi bi-copy cursor-pointer copy-icon"></i>
+            <span class="tooltip-text">Copy to Clipboard</span>
+          </p>
+          <p class="coin-details text-center">Or Scan Qr</p>
+          <div class="d-flex justify-content-center align-items-center">
+            <img src="./assets/images/qr-code.png" alt="" class="qrr">
+          </div>
+          <p class="coin-details text-center mt-2">Expires in <span class="text-danger timer">10:00</span>
+            minutes</p>
+
+          <div class="d-flex justify-content-center">
+            <a href="order-success.html" class="suc-payment text-white text-decoration-none">I have
+              Made Payment</a>
+          </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-center mb-4 mt-2">
+          <p class="mb-0 p-foot ac-color">Payment With</p>
+          <img src="./assets/icons/airdao.svg" class="i-width" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -119,7 +198,8 @@
 
   <!-- Our testTransfer script -->
   <script src="./js/index.js" type="module"></script>
-  <script src="./js/test-transfer.js"></script>
+  <script src="./js/test-transfer.js" type="module"></script>
+
 </body>
 
 </html>
