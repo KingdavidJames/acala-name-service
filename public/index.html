@@ -32,13 +32,14 @@
 <body>
     <header>
         <nav class="navbar bg-white mt-lg-5">
-            <div class="container">
+            <div class="container just-sm">
                 <a class="navbar-brand cursor-pointer" href="index.html">
-                    <img src="./assets/icons/logo-ex.svg" alt="Logo" class="d-inline-block">
+                    <img src="./assets/icons/logo-ex.svg" alt="Logo" class="d-inline-block d-sms-none">
+                    <img src="./assets/icons/ans-logo.svg" alt="Logo" class="d-inline-block d-none d-sm-inlineblock w-sm-80">
                 </a>
-                <ul class="ms-auto d-flex">
-                    <a href="#" class="con-bot text-decoration-none">Connect Wallet</a>
-                    <div class="d-flex walletshow align-items-center d-none justify-content-center ms-3">
+                <ul class="ms-auto d-flex mb-0 sm-fld">
+                    <a href="#" class="con-bot text-decoration-none text-center">Connect Wallet</a>
+                    <div class="d-flex walletshow align-items-center d-none mbsm-1 justify-content-center ms-3">
                         <img src="./assets/images/wallet-icon.png" alt="">
                         <div class="mb-0 fw-light ms-1 wallet-address"></div>
                     </div>
@@ -50,14 +51,21 @@
         <div class="container">
             <div class="row mt-4">
                 <div class="col-lg-7">
-                    <div class="mt-lg-5 mt-sm-3">
+                    <div class="mt-lg-5 mt-sm-3 d-sms-none">
                         <span class="grimmers position-absolute">Grimmers.amb</span>
                         <span class="grimmers position-absolute" id="kobby">Kobby.amb</span>
                         <span class="grimmers position-absolute" id="john">John.amb</span>
                         <span class="grimmers position-absolute" id="nothing">Nothing.amb</span>
-                        <h2 class="head-text mt-3">
-                            Simplify Your Blockchain Identity</h2>
                     </div>
+                    <div class="mt-3 mt-sm-3 d-none d-sms-flex justify-content-around">
+                        <span class="grimmers">Grimmers.amb</span>
+                        <span class="grimmers" id="kobby">Kobby.amb</span>
+                        <span class="grimmers" id="john">John.amb</span>
+                        <span class="grimmers" id="nothing">Nothing.amb</span>
+                    </div>
+                    <h2 class="head-text mt-3">
+                            Simplify Your Blockchain Identity</h2>
+                    
                     <div class="mt-4 head-p">
                         <p class="text-black2">
                             Attach a unique, human-readable name to your wallet address and eliminate the hassle of
@@ -67,22 +75,22 @@
                             trustworthy.
                         </p>
                     </div>
-                    <div class="mt-5 d-flex align-items-center">
-                        <span class="me-3"> <a class="getName text-decoration-none" href="find-identity.html">Get Your Name Now</a></span>
-                        <span class="me-3">
+                    <div class="mt-5 mt-sm-5 d-flex align-items-center just-be">
+                        <span class="me-3 mesm-0"> <a class="getName text-decoration-none" href="find-identity.html">Get Your Name Now</a></span>
+                        <span class="me-3 mesm-0">
                             <a href="decrypt-name.html" class="getName text-decoration-none">Decrypt Name</a>
                         </span>
-                        <span class="me-3">
+                        <span class="me-3 mesm-0">
                             <a href="test-transfer.html" class="getName text-decoration-none">Test ANS Transfer</a>
                         </span>
                     </div>
 
-                    <div class="mt-5 d-flex align-items-center">
+                    <div class="mt-5 mt-sm-5 d-flex align-items-center">
                         <p class="mb-0 ac-color">Integrated for</p>&nbsp;
-                        <img src="./assets/icons/airdao.svg" alt="">
+                        <img src="./assets/images/airdao.png" alt="">
                     </div>
                 </div>
-                <div class="col-lg-5 mt-3">
+                <div class="col-lg-5 mt-3 d-sms-none">
                     <div class="head-img d-flex justify-content-center">
                         <img src="./assets/icons/gphoto.svg" alt="" class="w-0">
                     </div>

@@ -33,10 +33,10 @@
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-lg-6">
+    <div class="row fcr">
+        <div class="col-lg-6 d-sms-none">
             <div class="conta bg-white">
-                <div class="logo"><a href="index.html"><img src="./assets/icons/ans-logo.svg" alt=""></a></div>
+                <div class="logo d-sms-none"><a href="index.html"><img src="./assets/icons/ans-logo.svg" alt=""></a></div>
                 <div class="signup-carousel owl-carousel owl-theme">
                     <div class="s-caro">
                         <div class="s-caro-img d-flex justify-content-start">
@@ -100,15 +100,19 @@
         </div>
         <div class="col-lg-6">
             <div class="conta bg-d9" id="findName">
-                <!-- <div class="d-flex align-items-center justify-content-center pb-5">
-                    <img src="./assets/images/wallet-icon.png" alt="">
-                    <p class="mb-0 fw-light ms-1"></p>
-                </div> -->
-                <ul class="me-auto d-flex justify-content-end">
-                    <a href="#" class="con-bot text-decoration-none">Connect Wallet</a>
-                    <div class="d-flex walletshow align-items-center d-none justify-content-center ms-3">
-                        <img src="./assets/images/wallet-icon.png" alt="">
-                        <div class="mb-0 fw-light ms-1 wallet-address"></div>
+                <ul class="me-auto d-flex justify-content-end ul-sm">
+                    <div>
+                        <a class="navbar-brand cursor-pointer" href="index.html">
+                            <img src="./assets/icons/ans-logo.svg" alt="Logo"
+                                class="d-inline-block d-none d-sm-inlineblock w-sm-80">
+                        </a>
+                    </div>
+                    <div class="sm-dis">
+                        <a href="#" class="con-bot text-decoration-none text-center">Connect Wallet</a>
+                        <div class="d-flex walletshow align-items-center d-none mbsm-1 justify-content-center ms-3">
+                            <img src="./assets/images/wallet-icon.png" alt="">
+                            <div class="mb-0 fw-light ms-1 wallet-address"></div>
+                        </div>
                     </div>
                 </ul>
                 <div class="mt-100 d-flex align-items-center justify-content-center flex-column">
@@ -117,8 +121,8 @@
                 </div>
                 <form class="d-flex search-box" id="sb" role="search">
                     <img src="./assets/images/search-normal.png" alt="">
-                    <input class="me-2 search-input" type="search" id="dynamic_searchbar" placeholder="E.g nothing.amb"
-                        aria-label="Search">
+                    <input class="me-2 search-input mesm-0" type="search" id="dynamic_searchbar"
+                        placeholder="E.g nothing.amb" aria-label="Search">
                     <div id="dropdown" class="dropdown-content"></div>
                 </form>
                 <div id="availableName">
@@ -270,7 +274,7 @@
         const findName = document.getElementById("findName");
         const registerName = document.getElementById("registerName");
         const back = document.querySelector(".back");
-        
+
         registerName.style.display = "none";
 
         // Toggle to show registerName and hide findName
