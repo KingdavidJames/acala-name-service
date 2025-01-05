@@ -139,7 +139,7 @@ async function connectWallet() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
                 if(isMobile){
                     toast.info("Redirecting to metamask")
-                    window.location.href = "https://metamask.app.link/dapp/https://airpay-v2-products.vercel.app/"
+                    window.location.href = "https://metamask.app.link/dapp/https://air-daonameservice.vercel.app/"
                     return
                 }
                 else{
