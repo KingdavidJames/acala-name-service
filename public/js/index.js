@@ -136,6 +136,16 @@ async function transferAMB(amount) {
  */
 async function connectWallet() {
     if (typeof window.ethereum === 'undefined') {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+                if(isMobile){
+                    toast.info("Redirecting to metamask")
+                    window.location.href = "https://metamask.app.link/dapp/https://airpay-v2-products.vercel.app/"
+                    return
+                }
+                else{
+                    toast.info("Please install Metamask to continue");
+                return;
+            }
         alert('MetaMask is not installed. Please install MetaMask and try again.');
         return;
     }
