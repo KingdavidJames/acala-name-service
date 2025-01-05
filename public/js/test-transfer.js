@@ -84,19 +84,80 @@ function updateUI(walletAddress) {
  * Connect to MetaMask and initialize Ethers
  */
 async function connectWallet() {
-    if (typeof window.ethereum === "undefined") {
-        alert("MetaMask is not installed. Please install MetaMask and try again.");
-        return;
+    if (typeof window.ethereum === 'undefined') {
+        // No window.ethereum => MetaMask not installed
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            // Redirect mobile users to MetaMask link
+            // (Adjust your domain below as needed)
+            alert("Redirecting to MetaMask...");
+            window.location.href = "https://metamask.app.link/dapp/https://air-daonameservice.vercel.app/";
+        } else {
+            alert("Please install MetaMask to continue.");
+        }
+        return; // Stop here since no MetaMask is available
     }
 
+    // MetaMask is present
     try {
-        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-        connectedWalletAddress = accounts[0];
-        localStorage.setItem("connectedWallet", connectedWalletAddress);
-        updateUI(connectedWalletAddress);
+        // Request account access
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const walletAddress = accounts[0];
+
+        // Initialize Ethers.js
+        await initializeEthers();
+
+        // Check if user is on AirDAO Testnet
+        const network = await provider.getNetwork();
+        if (network.chainId !== AIRDAO_TESTNET_CHAIN_ID) {
+            // Prompt user to switch
+            try {
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID) }],
+                });
+            } catch (switchError) {
+                // 4902 => chain not added to MetaMask
+                if (switchError.code === 4902) {
+                    try {
+                        await ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [
+                                {
+                                    chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID),
+                                    chainName: 'AirDAO Testnet',
+                                    rpcUrls: ['https://network.ambrosus-test.io'],
+                                    nativeCurrency: {
+                                        name: 'Amber Testnet',
+                                        symbol: 'AMB',
+                                        decimals: 18,
+                                    },
+                                    blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
+                                },
+                            ],
+                        });
+                    } catch (addError) {
+                        console.error('Error adding the chain:', addError);
+                        alert('Failed to add AirDAO Testnet to MetaMask. Please try again.');
+                        return;
+                    }
+                } else {
+                    console.error('Error switching network:', switchError);
+                    alert('Failed to switch to AirDAO Testnet. Please try again.');
+                    return;
+                }
+            }
+        }
+
+        // Save connection state
+        localStorage.setItem('connectedWallet', walletAddress);
+
+        // Update UI
+        updateUI(walletAddress);
+
     } catch (error) {
-        console.error("Error connecting wallet:", error);
-        alert("Failed to connect wallet. Please try again.");
+        console.error('Error connecting wallet:', error);
+        alert('Failed to connect wallet. Please try again.');
     }
 }
 
