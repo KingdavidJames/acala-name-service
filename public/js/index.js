@@ -141,7 +141,7 @@ async function connectWallet() {
         if (isMobile) {
             // Redirect mobile users to MetaMask link
             // (Adjust your domain below as needed)
-            toast.info("Redirecting to MetaMask...");
+            alert("Redirecting to MetaMask...");
             window.location.href = "https://metamask.app.link/dapp/https://air-daonameservice.vercel.app/";
         } else {
             alert("Please install MetaMask to continue.");
