@@ -135,81 +135,78 @@ async function transferAMB(amount) {
  * Connect to MetaMask and switch to AirDAO Testnet.
  */
 async function connectWallet() {
-    try {
-        if (!window.ethereum) {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-            if (isMobile) {
-                toast.info("Redirecting to metamask")
-                window.location.href = "https://metamask.app.link/dapp/https://air-daonameservice.vercel.app/"
-                return
-            }
-            else {
-                alert("Please install Metamask to continue");
-                return;
-            }
-
+    if (typeof window.ethereum === 'undefined') {
+        // No window.ethereum => MetaMask not installed
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+            // Redirect mobile users to MetaMask link
+            // (Adjust your domain below as needed)
+            toast.info("Redirecting to MetaMask...");
+            window.location.href = "https://metamask.app.link/dapp/https://air-daonameservice.vercel.app/";
+        } else {
+            alert("Please install MetaMask to continue.");
         }
-        try {
-            // Request account access if needed
-            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-            const walletAddress = accounts[0];
+        return; // Stop here since no MetaMask is available
+    }
 
-            // Initialize Ethers.js
-            await initializeEthers();
+    // MetaMask is present
+    try {
+        // Request account access
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        const walletAddress = accounts[0];
 
-            // Check if the user is on the correct network (AirDAO Testnet)
-            const network = await provider.getNetwork();
-            if (network.chainId !== AIRDAO_TESTNET_CHAIN_ID) {
-                // Prompt user to switch to AirDAO Testnet
-                try {
-                    await ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID) }],
-                    });
-                } catch (switchError) {
-                    // This error code indicates that the chain has not been added to MetaMask
-                    if (switchError.code === 4902) {
-                        try {
-                            await ethereum.request({
-                                method: 'wallet_addEthereumChain',
-                                params: [
-                                    {
-                                        chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID),
-                                        chainName: 'AirDAO Testnet',
-                                        rpcUrls: ['https://network.ambrosus-test.io'],
-                                        nativeCurrency: {
-                                            name: 'Amber Testnet',
-                                            symbol: 'AMB',
-                                            decimals: 18,
-                                        },
-                                        blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
+        // Initialize Ethers.js
+        await initializeEthers();
+
+        // Check if user is on AirDAO Testnet
+        const network = await provider.getNetwork();
+        if (network.chainId !== AIRDAO_TESTNET_CHAIN_ID) {
+            // Prompt user to switch
+            try {
+                await ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID) }],
+                });
+            } catch (switchError) {
+                // 4902 => chain not added to MetaMask
+                if (switchError.code === 4902) {
+                    try {
+                        await ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [
+                                {
+                                    chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID),
+                                    chainName: 'AirDAO Testnet',
+                                    rpcUrls: ['https://network.ambrosus-test.io'],
+                                    nativeCurrency: {
+                                        name: 'Amber Testnet',
+                                        symbol: 'AMB',
+                                        decimals: 18,
                                     },
-                                ],
-                            });
-                        } catch (addError) {
-                            console.error('Error adding the chain:', addError);
-                            alert('Failed to add AirDAO Testnet to MetaMask. Please try again.');
-                            return;
-                        }
-                    } else {
-                        console.error('Error switching network:', switchError);
-                        alert('Failed to switch to AirDAO Testnet. Please try again.');
+                                    blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
+                                },
+                            ],
+                        });
+                    } catch (addError) {
+                        console.error('Error adding the chain:', addError);
+                        alert('Failed to add AirDAO Testnet to MetaMask. Please try again.');
                         return;
                     }
+                } else {
+                    console.error('Error switching network:', switchError);
+                    alert('Failed to switch to AirDAO Testnet. Please try again.');
+                    return;
                 }
             }
-
-            // Save connection state
-            localStorage.setItem('connectedWallet', walletAddress);
-
-            // Update UI
-            updateUI(walletAddress);
-        } catch (error) {
-            console.error('Error connecting wallet:', error);
-            alert('Failed to connect wallet. Please try again.');
         }
-    }
-    catch (error) {
+
+        // Save connection state
+        localStorage.setItem('connectedWallet', walletAddress);
+
+        // Update UI
+        updateUI(walletAddress);
+
+    } catch (error) {
         console.error('Error connecting wallet:', error);
         alert('Failed to connect wallet. Please try again.');
     }
