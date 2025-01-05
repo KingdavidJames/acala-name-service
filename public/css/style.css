@@ -516,3 +516,6 @@ body {
 #unAvailableName {
     display: none;
 }
+.sm-dis{
+    display: flex;
+}
