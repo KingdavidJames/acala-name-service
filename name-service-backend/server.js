@@ -14,7 +14,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: 'https://air-daonameservice.vercel.app',
+    origin: 'http://127.0.0.1:5501',
 }));
 app.use(express.json());
 
