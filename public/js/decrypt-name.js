@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 2) On "Decrypt"
   decryptButton.addEventListener("click", async () => {
     const nameToCheck = (decryptInput.value || "").trim().toLowerCase();
-    if (!nameToCheck.endsWith(".amb") || nameToCheck === ".amb") {
-      decryptResult.innerHTML = `<p class="text-danger">Invalid .amb name (e.g. alice.amb)</p>`;
+    if (!nameToCheck.endsWith(".aca") || nameToCheck === ".aca") {
+      decryptResult.innerHTML = `<p class="text-danger">Invalid .aca name (e.g. alice.aca)</p>`;
       return;
     }
 
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <h5>ANS Name: ${response.payeeName}</h5>
           <p><strong>Wallet Address:</strong> ${response.payerAddress}</p>
           <p><strong>Tx Hash:</strong>
-            <a href="https://testnet.airdao.io/explorer/tx/${response.transactionHash}" target="_blank">
+            <a href="https://blockscout.mandala.aca-staging.network/tx/${response.transactionHash}" target="_blank">
               ${response.transactionHash}
             </a>
           </p>

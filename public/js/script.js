@@ -29,13 +29,13 @@ async function connectWallet() {
           {
             chainId: chainId,
             chainName: 'AirDAO Testnet',
-            rpcUrls: ['https://network.ambrosus-test.io'],
+            rpcUrls: ['https://network.acarosus-test.io'],
             nativeCurrency: {
-              name: 'Amber Testnet',
-              symbol: 'AMB',
+              name: 'acaer Testnet',
+              symbol: 'aca',
               decimals: 18,
             },
-            blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
+            blockExplorerUrls: ['https://explorer.acarosus-test.io'],
           },
         ],
       });

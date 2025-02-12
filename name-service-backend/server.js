@@ -32,8 +32,8 @@ app.post('/api/register-name', async (req, res) => {
         return res.status(400).json({ message: 'Name and wallet address are required.' });
     }
 
-    // Ensure name ends with '.amb'
-    const formattedName = name.toLowerCase().endsWith('.amb') ? name.toLowerCase() : `${name.toLowerCase()}.amb`;
+    // Ensure name ends with '.aca'
+    const formattedName = name.toLowerCase().endsWith('.aca') ? name.toLowerCase() : `${name.toLowerCase()}.aca`;
 
     try {
         // Check if name is already taken
@@ -67,7 +67,7 @@ app.get('/api/check-name', async (req, res) => {
         return res.status(400).json({ message: 'Name query parameter is required.' });
     }
 
-    const formattedName = name.toLowerCase().endsWith('.amb') ? name.toLowerCase() : `${name.toLowerCase()}.amb`;
+    const formattedName = name.toLowerCase().endsWith('.aca') ? name.toLowerCase() : `${name.toLowerCase()}.aca`;
 
     try {
         const existingName = await Transaction.findOne({ payeeName: formattedName });

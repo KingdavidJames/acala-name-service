@@ -69,10 +69,10 @@ searchInput.addEventListener("keydown", async function (e) {
             spinner.style.display = "none";
 
             // Check if name is in 'takenNames'
-            // We’ll standardize everything to "something.amb"
-            const formattedName = nameToCheck.endsWith(".amb")
+            // We’ll standardize everything to "something.aca"
+            const formattedName = nameToCheck.endsWith(".aca")
                 ? nameToCheck.toLowerCase()
-                : nameToCheck.toLowerCase() + ".amb";
+                : nameToCheck.toLowerCase() + ".aca";
 
             // Call the API to check if the name is taken
             try {
@@ -120,7 +120,7 @@ getNameLink.addEventListener("click", function (e) {
 
     // Grab the current displayed name from the availableDiv
     let text = availableDiv.querySelector("p").innerHTML;
-    // Example text: "something.amb is Available"
+    // Example text: "something.aca is Available"
     // We just want the name up to the " is "
     let tempDiv = document.createElement("div");
     tempDiv.innerHTML = text;
@@ -148,11 +148,11 @@ const yearDetails = document.querySelector(".year-details span");
 // Price references in the total-calc
 const pYearEls = document.querySelectorAll(".p-year");
 // The <span> in the modal where we show the total
-const modalTotalAMBEl = document.getElementById("modalTotalAMB");
+const modalTotalacaEl = document.getElementById("modalTotalaca");
 
 let yearCount = 1;
-let basePrice = 2;      // 8 AMB per year
-let networkFee = 1;     // 2 AMB per year
+let basePrice = 2;      // 8 aca per year
+let networkFee = 1;     // 2 aca per year
 
 function setYearCount(value) {
     yearCount = value;
@@ -170,17 +170,17 @@ function setYearCount(value) {
     // Assuming pYearEls are ordered correctly
     // Update the registration and fees
     pYearEls[0].textContent = `${yearCount} year registration`;
-    pYearEls[1].textContent = `${totalNamePrice} AMB`;
+    pYearEls[1].textContent = `${totalNamePrice} aca`;
     pYearEls[2].textContent = `Est. network fee`;
-    pYearEls[3].textContent = `${totalNetworkFee} AMB`;
+    pYearEls[3].textContent = `${totalNetworkFee} aca`;
     pYearEls[4].textContent = `Total`;
-    pYearEls[5].textContent = `${total} AMB`;
+    pYearEls[5].textContent = `${total} aca`;
 
 
 
     // Update the modal’s total <span>
-    if (modalTotalAMBEl) {
-        modalTotalAMBEl.textContent = total;
+    if (modalTotalacaEl) {
+        modalTotalacaEl.textContent = total;
     }
 
     // For minus button enable/disable

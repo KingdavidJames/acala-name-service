@@ -21,9 +21,9 @@ $(".signup-carousel").owlCarousel({
  * Global Variables
  *************************************/
 let connectedWalletAddress = localStorage.getItem("connectedWallet") || null;
-let finalRecipientAddress = "";     // Actual 0x address to transfer to (after .amb check)
-let originalRecipientInput = "";    // Used to track .amb name if user typed that
-let transferAmount = 0;            // AMB amount
+let finalRecipientAddress = "";     // Actual 0x address to transfer to (after .aca check)
+let originalRecipientInput = "";    // Used to track .aca name if user typed that
+let transferAmount = 0;            // aca amount
 let provider, signer;
 
 /*************************************
@@ -37,6 +37,8 @@ const transferStatus = document.getElementById("transferStatus");
 // Payment Method Modal and its triggers
 const paymentMethodModalEl = document.getElementById("staticBackdrop2");
 let paymentMethodModal = null;
+
+const MANDALA_TC9_CHAIN_ID = 595; // Mandala TC9 Chain ID
 
 // Manual Transfer Modal
 const manualTransferModalEl = document.getElementById("staticBackdrop");
@@ -85,74 +87,61 @@ function updateUI(walletAddress) {
  */
 async function connectWallet() {
     if (typeof window.ethereum === 'undefined') {
-        // No window.ethereum => MetaMask not installed
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
-            // Redirect mobile users to MetaMask link
-            // (Adjust your domain below as needed)
             alert("Redirecting to MetaMask...");
             window.location.href = "https://metamask.app.link/dapp/https://air-daonameservice.vercel.app/";
         } else {
             alert("Please install MetaMask to continue.");
         }
-        return; // Stop here since no MetaMask is available
+        return;
     }
 
-    // MetaMask is present
     try {
-        // Request account access
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         const walletAddress = accounts[0];
-
-        // Initialize Ethers.js
         await initializeEthers();
 
-        // Check if user is on AirDAO Testnet
         const network = await provider.getNetwork();
-        if (network.chainId !== AIRDAO_TESTNET_CHAIN_ID) {
-            // Prompt user to switch
+        if (network.chainId !== MANDALA_TC9_CHAIN_ID) {
             try {
                 await ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID) }],
+                    params: [{ chainId: ethers.utils.hexValue(MANDALA_TC9_CHAIN_ID) }],
                 });
             } catch (switchError) {
-                // 4902 => chain not added to MetaMask
                 if (switchError.code === 4902) {
                     try {
                         await ethereum.request({
                             method: 'wallet_addEthereumChain',
                             params: [
                                 {
-                                    chainId: ethers.utils.hexlify(AIRDAO_TESTNET_CHAIN_ID),
-                                    chainName: 'AirDAO Testnet',
-                                    rpcUrls: ['https://network.ambrosus-test.io'],
+                                    chainId: ethers.utils.hexValue(MANDALA_TC9_CHAIN_ID),
+                                    chainName: 'Mandala TC9',
+                                    rpcUrls: ['https://eth-rpc-tc9.aca-staging.network'],
                                     nativeCurrency: {
-                                        name: 'Amber Testnet',
-                                        symbol: 'AMB',
+                                        name: 'mACA',
+                                        symbol: 'mACA',
                                         decimals: 18,
                                     },
-                                    blockExplorerUrls: ['https://explorer.ambrosus-test.io'],
+                                    blockExplorerUrls: ['https://blockscout.mandala.aca-staging.network'],
                                 },
                             ],
                         });
                     } catch (addError) {
                         console.error('Error adding the chain:', addError);
-                        alert('Failed to add AirDAO Testnet to MetaMask. Please try again.');
+                        alert('Failed to add Mandala TC9 to MetaMask. Please try again.');
                         return;
                     }
                 } else {
                     console.error('Error switching network:', switchError);
-                    alert('Failed to switch to AirDAO Testnet. Please try again.');
+                    alert('Failed to switch to Mandala TC9. Please try again.');
                     return;
                 }
             }
         }
 
-        // Save connection state
         localStorage.setItem('connectedWallet', walletAddress);
-
-        // Update UI
         updateUI(walletAddress);
 
     } catch (error) {
@@ -160,7 +149,6 @@ async function connectWallet() {
         alert('Failed to connect wallet. Please try again.');
     }
 }
-
 /**
  * Disconnect Wallet
  */
@@ -199,9 +187,9 @@ transferButton.addEventListener("click", async () => {
         return;
     }
 
-    // 3) Determine if input is .amb or 0x address
-    if (originalRecipientInput.endsWith(".amb")) {
-        // .amb name => check DB
+    // 3) Determine if input is .aca or 0x address
+    if (originalRecipientInput.endsWith(".aca")) {
+        // .aca name => check DB
         try {
             const result = await getDecrypt(originalRecipientInput);
             // If success, result should contain the walletAddress from DB
@@ -221,7 +209,7 @@ transferButton.addEventListener("click", async () => {
     } else {
         // Must be a 0x address
         if (!/^0x[a-fA-F0-9]{40}$/.test(originalRecipientInput)) {
-            alert("Invalid recipient format. Must be a .amb name or a valid Ethereum address.");
+            alert("Invalid recipient format. Must be a .aca name or a valid Ethereum address.");
             return;
         }
         finalRecipientAddress = originalRecipientInput;
@@ -269,7 +257,7 @@ metamaskButton.addEventListener("click", async () => {
     }
 
     try {
-        // 1) Convert AMB to Wei
+        // 1) Convert aca to Wei
         const amountInWei = ethers.utils.parseUnits(transferAmount.toString(), 18);
         const amountInEther = ethers.utils.formatEther(amountInWei);
         console.log("Amount in Wei:", amountInWei.toString());
@@ -279,7 +267,7 @@ metamaskButton.addEventListener("click", async () => {
             to: finalRecipientAddress,
             value: amountInWei,
         });
-        const userConfirmed = confirm(`Do you want to send ${amountInEther} AMB to the recipient?`);
+        const userConfirmed = confirm(`Do you want to send ${amountInEther} aca to the recipient?`);
         if (!userConfirmed) {
             return;
         }
@@ -293,15 +281,15 @@ metamaskButton.addEventListener("click", async () => {
 
         // 4) Display success info
         const date = new Date().toLocaleString();
-        const usedRecipient = originalRecipientInput.endsWith(".amb")
-            ? originalRecipientInput // show .amb if user typed that
+        const usedRecipient = originalRecipientInput.endsWith(".aca")
+            ? originalRecipientInput // show .aca if user typed that
             : finalRecipientAddress; // otherwise show the 0x address
 
         transferStatus.innerHTML = `
       <div class="text-success mt-3">
         <p><strong>Transaction Successful!</strong></p>
         <p>Transaction Hash: <span>${receipt.transactionHash}</span></p>
-        <p>Amount: <span>${transferAmount} AMB</span></p>
+        <p>Amount: <span>${transferAmount} aca</span></p>
         <p>Recipient: <span>${usedRecipient}</span></p>
         <p>Time: <span>${date}</span></p>
       </div>
