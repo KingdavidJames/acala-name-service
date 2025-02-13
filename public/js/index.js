@@ -289,13 +289,14 @@ function checkConnection() {
         updateUI(null);
     }
 }
-
+let tokenUsed // Token symbol (or adjust based on token paid in)
 /**
  * Handle MetaMask Payment Click
  */
 async function handleMetaMaskPayment() {
     // Check if wallet is connected
     const connectedWallet = localStorage.getItem('connectedWallet');
+    tokenUsed = "mACA"; // Token symbol (or adjust based on token paid in)
 
     if (!connectedWallet) {
         alert('No wallet connected. Please connect your wallet and try again.');
@@ -346,11 +347,26 @@ async function handleMetaMaskPayment() {
         });
         console.log("Estimated Gas:", estimatedGas.toString());
 
+        
+
+        // Prepare the JSON object with your purchase details
+        const purchaseDetails = {
+            namePaidFor: nameChosenEl.textContent.toLowerCase(),
+            payerAddress: payerAddress,
+            amountPaid: `${totalaca} ${tokenUsed}`,              // The amount paid (e.g., in aca)
+            yearsPaid: yearDetails.textContent  // Number of years paid for
+        };
+
+        // Convert the JSON object to a string, then to a hex string
+        const jsonString = JSON.stringify(purchaseDetails);
+        const dataHex = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(jsonString));
+
 
         // Initiate the transfer
         const tx = await signer.sendTransaction({
             to: RECIPIENT_ADDRESS,
             value: amountInWei,
+            data: dataHex
         });
 
         console.log('Transaction sent:', tx.hash);
