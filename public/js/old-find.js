@@ -1,98 +1,27 @@
-/*************************************
- * Dropdown & Pricing Logic
- *************************************/
-// Pricing mapping for each currency
-const pricingData = {
-    ACA: { basePrice: 2, networkFee: 1 },
-    LDOT: { basePrice: 3, networkFee: 1.5 },
-    tDOT: { basePrice: 4, networkFee: 2 }
-};
-
-// Global pricing variables (initially set for ACA)
-let basePrice = pricingData.ACA.basePrice;
-let networkFee = pricingData.ACA.networkFee;
-let currentCurrency = "ACA"; // current currency for display
-
-// Global year count
-let yearCount = 1;
-
-// DOM Elements for price calculation (make sure these IDs/classes exist in your HTML)
-const yearDisplay = document.getElementById("yearDisplay");
-const yearDetails = document.querySelector(".year-details span");
-const pYearEls = document.querySelectorAll(".p-year");
-const modalTotalacaEl = document.getElementById("modalTotalaca");
-const minusBtn = document.getElementById("minusBtn");
-const plusBtn = document.getElementById("plusBtn");
-
-// Function to update pricing display based on the yearCount
-function setYearCount(value) {
-    yearCount = value;
-    yearDisplay.textContent = `${yearCount} Year${yearCount > 1 ? "s" : ""}`;
-    yearDetails.textContent = `${yearCount}`;
-
-    // Calculate prices
-    const totalNamePrice = basePrice * yearCount;
-    const totalNetworkFee = networkFee * yearCount;
-    const total = totalNamePrice + totalNetworkFee;
-
-    // Update the text in the .total-calc elements
-    pYearEls[0].textContent = `${yearCount} year registration`;
-    pYearEls[1].textContent = `${totalNamePrice} ${currentCurrency}`;
-    pYearEls[2].textContent = `Est. network fee`;
-    pYearEls[3].textContent = `${totalNetworkFee} ${currentCurrency}`;
-    pYearEls[4].textContent = `Total`;
-    pYearEls[5].textContent = `${total} ${currentCurrency}`;
-
-    // Update the modal’s total <span>
-    if (modalTotalacaEl) {
-        modalTotalacaEl.textContent = total;
-    }
-
-    // Enable/disable the minus button based on the year count
-    if (yearCount <= 1) {
-        minusBtn.classList.add("disabled");
-        minusBtn.disabled = true;
-    } else {
-        minusBtn.classList.remove("disabled");
-        minusBtn.disabled = false;
-    }
-}
-
-// Initialize pricing with 1 year on load
-setYearCount(1);
-
-// Dropdown Items Logic
+// Select all dropdown items
 const dropdownItems = document.querySelectorAll('.dropdown-item');
-dropdownItems.forEach(item => {
-    item.addEventListener('click', function (e) {
-        e.preventDefault();
 
-        // Retrieve data attributes from the clicked dropdown item
-        const imgSrc = this.getAttribute('data-img');
-        const title = this.getAttribute('data-title');
-        const details = this.getAttribute('data-details');
+// Listen for clicks on each item
+  dropdownItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default link behavior
 
-        // Update the dropdown toggle button content
-        const dropdownToggle = document.getElementById('dropdownMenuButton');
-        dropdownToggle.innerHTML = `
+      // Retrieve the data attributes from the clicked item
+      const imgSrc = this.getAttribute('data-img');
+      const title = this.getAttribute('data-title');
+      const details = this.getAttribute('data-details');
+
+      // Update the content of the dropdown toggle button
+      const dropdownToggle = document.getElementById('dropdownMenuButton');
+      dropdownToggle.innerHTML = `
         <img src="${imgSrc}" class="w-50px" alt="">
         <div class="ms-3 me-5">
           <h1 class="modal-title fs-5 coin-header">${title}</h1>
           <p class="coin-details mb-0">${details}</p>
         </div>
       `;
-
-        // Update pricing variables based on the selected currency
-        if (pricingData[title]) {
-            basePrice = pricingData[title].basePrice;
-            networkFee = pricingData[title].networkFee;
-            currentCurrency = title;
-        }
-
-        // Recalculate the totals based on the new currency values
-        setYearCount(yearCount);
     });
-});
+  });
 
 /*************************************
  * Simulated CSV Data (in-memory)
@@ -112,6 +41,8 @@ const availableDiv = document.getElementById("availableName");
 const unavailableDiv = document.getElementById("unAvailableName");
 const getNameLink = document.getElementById("getName");
 
+
+
 // Spinner Element
 let spinner = null;
 
@@ -119,9 +50,10 @@ let spinner = null;
 const registerNameDiv = document.getElementById("registerName");
 const findNameDiv = document.getElementById("findName");
 const nameChosenEl = document.getElementById("nameChosen");
-
+ 
 /*************************************
- * Hide the available/unavailable name divs initially
+ * Hide the available/unavailable name
+ * divs initially
  *************************************/
 availableDiv.style.display = "none";
 unavailableDiv.style.display = "none";
@@ -129,55 +61,73 @@ unavailableDiv.style.display = "none";
 /*************************************
  * Add a spinner next to the input
  *************************************/
+// Create spinner element (Bootstrap 5)
 spinner = document.createElement("div");
 spinner.className = "spinner-border spinner-border-sm text-primary ms-2 simp";
 spinner.setAttribute("role", "status");
 spinner.style.display = "none";
+// Insert spinner after the input
 searchInput.parentNode.appendChild(spinner);
 
 /*************************************
  * Searching for a name
  *************************************/
 searchInput.addEventListener("keydown", async function (e) {
+    // If user presses Enter:
     if (e.key === "Enter") {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form submission or page refresh
+
+        // Show spinner
         spinner.style.display = "inline-block";
 
         const nameToCheck = this.value.trim();
         if (!nameToCheck) {
+            // If empty, just hide everything
             availableDiv.style.display = "none";
             unavailableDiv.style.display = "none";
             spinner.style.display = "none";
             return;
         }
 
-        // Simulate delay for searching
-        setTimeout(async () => {
+        // Simulate a short delay for searching
+        setTimeout(async() => {
             spinner.style.display = "none";
-            // Format the name (assuming ".aca" as default)
+
+            // Check if name is in 'takenNames'
+            // We’ll standardize everything to "something.aca"
             const formattedName = nameToCheck.endsWith(".aca")
                 ? nameToCheck.toLowerCase()
                 : nameToCheck.toLowerCase() + ".aca";
 
+            // Call the API to check if the name is taken
             try {
-                const response = await checkName(formattedName);
-                console.log(response);
-                if (response.taken) {
-                    availableDiv.style.display = "none";
-                    unavailableDiv.style.display = "flex";
-                    unavailableDiv.querySelector("p").innerHTML =
-                        `${formattedName} is <span class="text-red fw-medium">Taken</span>`;
-                } else {
-                    unavailableDiv.style.display = "none";
-                    availableDiv.style.display = "flex";
-                    availableDiv.querySelector("p").innerHTML =
-                        `${formattedName} is <span class="text-green fw-medium">Available</span>`;
-                }
-            } catch (error) {
-                console.error("Error checking name:", error);
-                alert("An error occurred while checking the name. Please try again.");
+            const response = await checkName(formattedName);
+            console.log(response);
+            if (response.taken) {
+                // Unavailable
+                availableDiv.style.display = "none";
+                unavailableDiv.style.display = "flex";
+
+                // Update the text with the name
+                unavailableDiv.querySelector("p").innerHTML =
+                    `${formattedName} is <span class="text-red fw-medium">Taken</span>`;
+            } else {
+                // Available
+                unavailableDiv.style.display = "none";
+                availableDiv.style.display = "flex";
+
+                // Update the text with the name
+                availableDiv.querySelector("p").innerHTML =
+                    `${formattedName} is <span class="text-green fw-medium">Available</span>`;
             }
-        }, 1000);
+            
+        } catch (error) {
+            console.error("Error checking name:", error);
+            alert("An error occurred while checking the name. Please try again.");
+            
+        }
+            
+        }, 1000); // 1 second search delay
     }
 });
 
@@ -186,23 +136,91 @@ searchInput.addEventListener("keydown", async function (e) {
  *************************************/
 getNameLink.addEventListener("click", function (e) {
     e.preventDefault();
+
+    // Ensure the name is available
     if (availableDiv.style.display !== "flex") {
         alert("The selected name is not available.");
         return;
     }
+
+    // Grab the current displayed name from the availableDiv
     let text = availableDiv.querySelector("p").innerHTML;
+    // Example text: "something.aca is Available"
+    // We just want the name up to the " is "
     let tempDiv = document.createElement("div");
     tempDiv.innerHTML = text;
     let chosenName = tempDiv.textContent.split(" is ")[0];
+
+    // Put that name in the #nameChosen element
     nameChosenEl.textContent = chosenName;
+
+    // Show the registerName screen, hide the findName screen
     findNameDiv.style.display = "none";
     registerNameDiv.style.display = "block";
+
+    // Reset years to 1
     setYearCount(1);
 });
 
 /*************************************
  * Year increment / decrement logic
  *************************************/
+const minusBtn = document.getElementById("minusBtn");
+const plusBtn = document.getElementById("plusBtn");
+const yearDisplay = document.getElementById("yearDisplay");
+const yearDetails = document.querySelector(".year-details span");
+
+// Price references in the total-calc
+const pYearEls = document.querySelectorAll(".p-year");
+// The <span> in the modal where we show the total
+const modalTotalacaEl = document.getElementById("modalTotalaca");
+
+let yearCount = 1;
+let basePrice = 2;      // 8 aca per year
+let networkFee = 1;     // 2 aca per year
+
+function setYearCount(value) {
+    yearCount = value;
+    yearDisplay.textContent = `${yearCount} Year${yearCount > 1 ? "s" : ""}`;
+
+    // Also update the "x year registration" below the +/- control
+    yearDetails.textContent = `${yearCount}`;
+
+    // Calculate prices
+    const totalNamePrice = basePrice * yearCount;
+    const totalNetworkFee = networkFee * yearCount;
+    const total = totalNamePrice + totalNetworkFee;
+
+    // Update the text in the .total-calc
+    // Assuming pYearEls are ordered correctly
+    // Update the registration and fees
+    pYearEls[0].textContent = `${yearCount} year registration`;
+    pYearEls[1].textContent = `${totalNamePrice} ACA`;
+    pYearEls[2].textContent = `Est. network fee`;
+    pYearEls[3].textContent = `${totalNetworkFee} ACA`;
+    pYearEls[4].textContent = `Total`;
+    pYearEls[5].textContent = `${total} ACA`;
+
+
+
+    // Update the modal’s total <span>
+    if (modalTotalacaEl) {
+        modalTotalacaEl.textContent = total;
+    }
+
+    // For minus button enable/disable
+    if (yearCount <= 1) {
+        minusBtn.classList.add("disabled");
+        minusBtn.disabled = true;
+    } else {
+        minusBtn.classList.remove("disabled");
+        minusBtn.disabled = false;
+    }
+}
+
+// On load, set to 1 year
+setYearCount(1);
+
 minusBtn.addEventListener("click", function () {
     if (yearCount > 1) {
         setYearCount(yearCount - 1);
@@ -214,18 +232,30 @@ plusBtn.addEventListener("click", function () {
 });
 
 /*************************************
- * "I have made payment" button logic (in the modal)
+ * "I have made payment" button logic
+ * (in the modal)
  *************************************/
 const iHavePaidBtn = document.querySelector(".suc-payment");
 iHavePaidBtn.addEventListener("click", function (event) {
+    // The user’s chosen name:
     const justRegisteredName = nameChosenEl.textContent.toLowerCase();
+
+    // 1) Add to your in-memory array
     if (!takenNames.includes(justRegisteredName)) {
         takenNames.push(justRegisteredName);
         console.log("Updated takenNames array:", takenNames);
     }
+
+    // 2) Save updated array to localStorage so it persists
     localStorage.setItem("takenNames", JSON.stringify(takenNames));
+
+    // 3) Also save the "justRegisteredName" so the next page (success page) can display it
     localStorage.setItem("chosenName", justRegisteredName);
+
+    // 4) Let the link navigate to order-success.html as usual
+    //    (Or if you’re preventing default, you can redirect manually)
 });
+
 
 /*************************************
  * Owl Carousel Initialization
@@ -247,17 +277,20 @@ $(".signup-carousel").owlCarousel({
 /*************************************
  * TOGGLE DISPLAY
  *************************************/
+
 const getName = document.getElementById("getName");
 const findName = document.getElementById("findName");
 const registerName = document.getElementById("registerName");
 const back = document.querySelector(".back");
 
+// Toggle to show registerName and hide findName
 getName.addEventListener("click", (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent default anchor behavior
     findName.style.display = "none";
     registerName.style.display = "block";
 });
 
+// Toggle back to show findName and hide registerName
 back.addEventListener("click", () => {
     registerName.style.display = "none";
     findName.style.display = "block";
@@ -268,16 +301,21 @@ back.addEventListener("click", () => {
  *************************************/
 const paymentModal = document.getElementById("staticBackdrop");
 const timerElement = document.querySelector(".timer");
+
 let countdownInterval;
 
+// Function to start the countdown
 function startCountdown(duration) {
     let time = duration;
     updateTimerDisplay(time);
+
     countdownInterval = setInterval(() => {
         time--;
         updateTimerDisplay(time);
+
         if (time <= 0) {
             clearInterval(countdownInterval);
+            // Optionally, you can auto-close the modal or notify the user
             const modalInstance = bootstrap.Modal.getInstance(paymentModal);
             if (modalInstance) {
                 modalInstance.hide();
@@ -287,38 +325,48 @@ function startCountdown(duration) {
     }, 1000);
 }
 
+// Function to format and display the timer
 function updateTimerDisplay(time) {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     timerElement.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
+// Event listener for modal show
 if (paymentModal) {
     paymentModal.addEventListener("show.bs.modal", () => {
-        clearInterval(countdownInterval);
-        startCountdown(5 * 60); // 5-minute countdown
+        clearInterval(countdownInterval); // Clear any existing timer
+        startCountdown(5 * 60); // Start a 10-minute countdown
     });
+
+    // Event listener for modal hide
     paymentModal.addEventListener("hide.bs.modal", () => {
-        clearInterval(countdownInterval);
+        clearInterval(countdownInterval); // Stop the timer when modal is hidden
     });
 }
 
 /*************************************
  * Copy to Clipboard Tooltip
  *************************************/
+
 const copyIcon = document.querySelector(".copy-icon");
 const tooltipText = document.querySelector(".tooltip-text");
 
+// Show "Copy to Clipboard" on hover
 copyIcon.addEventListener("mouseover", function () {
     tooltipText.textContent = "Copy to Clipboard";
     tooltipText.classList.remove("copied");
 });
 
+// Copy text to clipboard on click
 copyIcon.addEventListener("click", function () {
-    const walletAddress = "0x1787b2190C575bAFb61d8582589E0eB4DFBA2C84"; // Adjust if needed
+    const walletAddress = "0x1787b2190C575bAFb61d8582589E0eB4DFBA2C84"; // Replace with dynamic content if needed
     navigator.clipboard.writeText(walletAddress).then(() => {
+        // Change tooltip to "Copied!" on click
         tooltipText.textContent = "Copied!";
         tooltipText.classList.add("copied");
+
+        // Revert to "Copy to Clipboard" after 2 seconds
         setTimeout(() => {
             tooltipText.textContent = "Copy to Clipboard";
             tooltipText.classList.remove("copied");
@@ -331,4 +379,4 @@ copyIcon.addEventListener("click", function () {
 /*************************************
  * Ethers.js Helper Functions (Optional Enhancements)
  *************************************/
-// Place your optional Ethers.js helper functions here if needed.
+

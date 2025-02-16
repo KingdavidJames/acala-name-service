@@ -1,7 +1,7 @@
 // api.js
 
 // Base URL of your backend API
-const API_BASE_URL = 'http://localhost:5000/api'; // Replace with your actual backend URL
+const API_BASE_URL = 'http://localhost:5002/api'; // Replace with your actual backend URL
 
 /**
  * Registers a new name with the provided wallet address.

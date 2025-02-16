@@ -291,6 +291,26 @@ body {
 .signup-carousel{
     margin-top: 100px;
 }
+.dropdown-edit{
+    border: 1px solid;
+    border-radius: 50px;
+    padding: 13px 30px;
+    background-color: transparent;
+}
+.w-50px{
+    width: 45px;
+}
+.h-50{
+    height: 45px;
+}
+.w-400{
+    width: 350px;
+}
+.dropdown-item.active, .dropdown-item:active {
+    color: var(--bs-dropdown-link-active-color);
+    text-decoration: none;
+    background-color: transparent;
+}
 .s-caro {
     padding: 0px 20px 10px 0px;
   }

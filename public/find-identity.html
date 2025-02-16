@@ -36,7 +36,8 @@
     <div class="row fcr">
         <div class="col-lg-6 d-sms-none">
             <div class="conta bg-white">
-                <div class="logo d-sms-none"><a href="index.html"><img src="./assets/icons/ans-logo.svg" alt=""></a></div>
+                <div class="logo d-sms-none"><a href="index.html"><img src="./assets/icons/ans-logo.svg" alt=""></a>
+                </div>
                 <div class="signup-carousel owl-carousel owl-theme">
                     <div class="s-caro">
                         <div class="s-caro-img d-flex justify-content-start">
@@ -98,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 pe-0">
             <div class="conta bg-d9" id="findName">
                 <ul class="me-auto d-flex justify-content-end ul-sm">
                     <div>
@@ -138,7 +139,8 @@
                 </div>
             </div>
 
-            <div class="conta bg-d9" id="registerName">
+            <div class="conta bg-d9" id="registerName" style="display: block !important;">
+
                 <ul class="me-auto d-flex justify-content-end">
                     <div class="d-flex walletshow align-items-center justify-content-center ms-3">
                         <img src="./assets/images/wallet-icon.png" alt="">
@@ -151,6 +153,52 @@
                             stroke-width="1.5" d="M20 12H4m0 0l6-6m-6 6l6 6" />
                     </svg>
                 </div>
+                <div class="dropdown-center d-flex justify-content-center align-items-center">
+                    <!-- Dropdown Toggle Button -->
+                    <button class="dropdown-toggle dropdown-edit d-flex justify-content-center align-items-center"
+                        type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="./assets/images/aca.avif" class="w-50px" alt="">
+                        <div class="ms-3 me-5">
+                            <h1 class="modal-title lh-1 fs-5 coin-header">ACA</h1>
+                            <p class="coin-details mb-0">Acala</p>
+                        </div>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton">
+                        <li class="bod-bot">
+                            <a class="dropdown-item d-flex px-4 align-items-center" href="#"
+                                data-img="./assets/images/aca.avif" data-title="ACA" data-details="Acala">
+                                <img src="./assets/images/aca.avif" alt="" class="w-50px h-50">
+                                <div class="ms-2 my-3">
+                                    <h1 class="modal-title lh-1 fs-5 coin-header">ACA</h1>
+                                    <p class="coin-details mb-0">Acala</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="bod-bot w-400">
+                            <a class="dropdown-item d-flex px-4 align-items-center" href="#"
+                                data-img="./assets/images/LCDOT.png" data-title="LDOT" data-details="Liquid DOT">
+                                <img src="./assets/images/LCDOT.png" alt="" class="w-50px h-50">
+                                <div class="ms-2 my-3">
+                                    <h1 class="modal-title lh-1 fs-5 coin-header">LDOT</h1>
+                                    <p class="coin-details mb-0">Liquid DOT</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="bod-bot">
+                            <a class="dropdown-item d-flex px-4 align-items-center" href="#"
+                                data-img="./assets/images/tdot.png" data-title="tDOT" data-details="Taiga DOT">
+                                <img src="./assets/images/tdot.png" alt="" class="w-50px h-50">
+                                <div class="ms-2 my-3">
+                                    <h1 class="modal-title lh-1 fs-5 coin-header">tDOT</h1>
+                                    <p class="coin-details mb-0">Taiga DOT</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
                 <div class="mt-5 d-flex align-items-center justify-content-center flex-column">
                     <img src="./assets/icons/single-logo.svg" alt="">
                     <p class="mt-3 mb-0">Register</p>
@@ -198,8 +246,8 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body px-6 py-4">
-                    <div class="aca md-but d-flex align-items-center px-2 py-2 mb-4" data-bs-toggle="modal"
+                <div class="modal-body px-5 py-4">
+                    <div class="aca md-but bod-bot d-flex align-items-center px-2 py-2 mb-4 cursor-pointer" data-bs-toggle="modal"
                         id="manualTransfer" data-bs-target="#staticBackdrop">
                         <div class="me-2 ms-2">
                             <img src="./assets/icons/wallet.svg" alt="">
@@ -208,7 +256,7 @@
                             <p class="coin-header fs-6 text-black mb-0">Manual Transfer</p>
                         </div>
                     </div>
-                    <div class="aca md-but d-flex align-items-center px-2 py-2 mb-4" id="metamask">
+                    <div class="aca md-but d-flex align-items-center px-2 py-2 mb-4 cursor-pointer" id="metamask">
                         <div class="me-2 ms-2">
                             <img src="./assets/icons/metamask.svg" alt="">
                         </div>

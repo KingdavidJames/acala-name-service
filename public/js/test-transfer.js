@@ -17,6 +17,32 @@ $(".signup-carousel").owlCarousel({
     },
 });
 
+// Select all dropdown items
+const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+// Listen for clicks on each item
+  dropdownItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default link behavior
+
+      // Retrieve the data attributes from the clicked item
+      const imgSrc = this.getAttribute('data-img');
+      const title = this.getAttribute('data-title');
+      const details = this.getAttribute('data-details');
+
+      // Update the content of the dropdown toggle button
+      const dropdownToggle = document.getElementById('dropdownMenuButton');
+      dropdownToggle.innerHTML = `
+        <img src="${imgSrc}" class="w-50px" alt="">
+        <div class="ms-3 me-5">
+          <h1 class="modal-title fs-5 coin-header">${title}</h1>
+          <p class="coin-details mb-0">${details}</p>
+        </div>
+      `;
+    });
+  });
+
+
 /*************************************
  * Global Variables
  *************************************/
